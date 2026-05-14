@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz de Instrumentais Cirurgicos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <section class="topbar" aria-label="Controles do quiz">
+      <div>
+        <h1>Quiz de Instrumentais Cirurgicos</h1>
+        <p id="progressText">Carregando imagens...</p>
+      </div>
+      <div class="score">
+        <span id="scoreText">0 / 0</span>
+        <button id="studyBtn" type="button">Tabela de estudo</button>
+        <button id="shuffleBtn" type="button">Embaralhar</button>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="photoStage" id="photoStage" aria-live="polite"></div>
+
+      <aside class="answerPanel">
+        <form id="answerForm" autocomplete="off">
+          <label for="answerInput">Nome completo do instrumento</label>
+          <textarea id="answerInput" rows="3" spellcheck="false"></textarea>
+          <button id="checkBtn" type="submit">Conferir</button>
+        </form>
+
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+
+        <section class="correctionBox" id="correctionBox" hidden>
+          <h2>Correção</h2>
+          <div class="correctionRow">
+            <span>Sua resposta</span>
+            <p id="typedCorrection"></p>
+          </div>
+          <div class="correctionRow">
+            <span>Gabarito</span>
+            <p id="answerCorrection"></p>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button id="showAnswerBtn" type="button">Ver resposta</button>
+          <button id="nextBtn" type="button">Proxima</button>
+        </div>
+
+        <section class="responseBox" id="responseBox" hidden>
+          <h2>Resposta</h2>
+          <p id="correctAnswer"></p>
+          <div id="responseImages" class="responseImages"></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="studySection" id="studySection">
+      <div class="studyHeader">
+        <div>
+          <h2>Tabela de estudo</h2>
+          <p>Nomes gerais e variações. Clique em uma variação para ver as fotos.</p>
+        </div>
+      </div>
+      <div class="studyLayout">
+        <div class="studyTable" id="studyTable"></div>
+        <aside class="studyPreview" id="studyPreview">
+          <h3 id="studyPreviewTitle">Selecione uma variação</h3>
+          <div id="studyPreviewImages" class="responseImages"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script src="quiz-data.js" charset="utf-8"></script>
+  <script src="app.js"></script>
+</body>
+</html>
