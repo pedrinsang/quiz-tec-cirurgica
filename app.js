@@ -259,7 +259,7 @@ function splitStudyName(item) {
     [/^(Pinça Hemostática Traumática) de (.+)$/i, "$1", "de $2"],
     [/^(Pinça tecidual) de (.+)$/i, "$1", "de $2"],
     [/^(Porta-agulha) de (.+)$/i, "$1", "de $2"],
-    [/^(Tesoura de dissecação de Metzenbaum) (.+)$/i, "$1", "$2"],
+    [/^(Tesoura de .+ de Metzenbaum) (.+)$/i, "$1", "$2"],
     [/^(Tesoura Operacional Cirúrgica) (.+)$/i, "$1", "$2"],
     [/^(Tesoura Operacional de Mayo) (.+)$/i, "$1", "$2"],
   ];
