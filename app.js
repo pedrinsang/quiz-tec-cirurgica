@@ -23,6 +23,8 @@ const els = {
   responseImages: document.querySelector("#responseImages"),
   correctAnswer: document.querySelector("#correctAnswer"),
   nextBtn: document.querySelector("#nextBtn"),
+  addCorrectBtn: document.querySelector("#addCorrectBtn"),
+  removeCorrectBtn: document.querySelector("#removeCorrectBtn"),
   showAnswerBtn: document.querySelector("#showAnswerBtn"),
   shuffleBtn: document.querySelector("#shuffleBtn"),
 };
@@ -372,10 +374,13 @@ function renderStudyTable() {
 
 function updateChrome() {
   const total = state.items.length;
+  const percentage = total ? Math.round((state.correct.size / total) * 100) : 0;
   els.progressText.textContent = total
-    ? `Questao ${state.index + 1} de ${total}`
+    ? state.index >= total
+      ? "Quiz finalizado"
+      : `Questao ${state.index + 1} de ${total}`
     : "Nenhum item encontrado. Gere quiz-data.js primeiro.";
-  els.scoreText.textContent = `${state.correct.size} / ${total}`;
+  els.scoreText.textContent = `${state.correct.size} / ${total} (${percentage}%)`;
 }
 
 function clearFeedback() {
@@ -393,16 +398,40 @@ function renderItem() {
   els.answerCorrection.innerHTML = "";
   els.responseBox.hidden = true;
   els.responseImages.innerHTML = "";
+  els.correctAnswer.textContent = "";
 
   if (!item) {
-    els.photoStage.innerHTML = "";
+    renderFinish();
     els.answerInput.disabled = true;
+    els.showAnswerBtn.disabled = true;
+    els.nextBtn.disabled = true;
+    els.addCorrectBtn.disabled = true;
+    els.removeCorrectBtn.disabled = true;
     return;
   }
 
   els.answerInput.disabled = false;
+  els.showAnswerBtn.disabled = false;
+  els.nextBtn.disabled = false;
+  els.addCorrectBtn.disabled = false;
+  els.removeCorrectBtn.disabled = false;
   renderImages(els.photoStage, item.imagens);
   els.answerInput.focus();
+}
+
+function renderFinish() {
+  const total = state.items.length;
+  const percentage = total ? Math.round((state.correct.size / total) * 100) : 0;
+
+  els.photoStage.innerHTML = "";
+  const finish = document.createElement("section");
+  finish.className = "finishBox";
+  finish.innerHTML = `
+    <h2>Quiz acabou!</h2>
+    <p>Voce acertou <strong>${state.correct.size}</strong> de <strong>${total}</strong> instrumentos.</p>
+    <p class="finishPercent">${percentage}% de acertos</p>
+  `;
+  els.photoStage.append(finish);
 }
 
 function showAnswer() {
@@ -444,8 +473,25 @@ function checkAnswer(event) {
 
 function nextItem() {
   if (!state.items.length) return;
-  state.index = (state.index + 1) % state.items.length;
+  state.index += 1;
   renderItem();
+}
+
+function adjustCurrentScore(direction) {
+  const item = currentItem();
+  if (!item) return;
+
+  if (direction > 0) {
+    state.correct.add(item.id);
+    els.feedback.className = "feedback ok";
+    els.feedback.textContent = "Acerto adicionado manualmente.";
+  } else {
+    state.correct.delete(item.id);
+    els.feedback.className = "feedback error";
+    els.feedback.textContent = "Acerto retirado manualmente.";
+  }
+
+  updateChrome();
 }
 
 function shuffleItems() {
@@ -469,6 +515,8 @@ function shuffleItemsSilently() {
 
 els.answerForm.addEventListener("submit", checkAnswer);
 els.nextBtn.addEventListener("click", nextItem);
+els.addCorrectBtn.addEventListener("click", () => adjustCurrentScore(1));
+els.removeCorrectBtn.addEventListener("click", () => adjustCurrentScore(-1));
 els.showAnswerBtn.addEventListener("click", showAnswer);
 els.shuffleBtn.addEventListener("click", shuffleItems);
 els.studyBtn.addEventListener("click", () => {

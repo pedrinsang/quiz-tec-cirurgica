@@ -225,7 +225,8 @@ window.QUIZ_ITEMS = [
         "nome_arquivo":  "Pinça hem traum de Crile curva",
         "resposta":  "Pinça Hemostática Traumática de Crile curva",
         "imagens":  [
-                        "fotos/Pinça hem traum de Crile curva.jpeg"
+                        "fotos/Pinça hem traum de Crile curva 1.jpeg",
+                        "fotos/Pinça hem traum de Crile curva 2.jpeg"
                     ],
         "respostas":  [
                           "fotos/Pinça hem traum de Crile curva - Resp.jpeg"
@@ -281,7 +282,8 @@ window.QUIZ_ITEMS = [
         "nome_arquivo":  "Pinça hem traum de Kelly reta",
         "resposta":  "Pinça Hemostática Traumática de Kelly reta",
         "imagens":  [
-                        "fotos/Pinça hem traum de Kelly reta 1.jpeg"
+                        "fotos/Pinça hem traum de Kelly reta 1.jpeg",
+                        "fotos/Pinça hem traum de Kelly reta 2.jpeg"
                     ],
         "respostas":  [
                           "fotos/Pinça hem traum de Kelly reta - Resp.jpeg"
@@ -318,8 +320,7 @@ window.QUIZ_ITEMS = [
         "imagens":  [
                         "fotos/Pinça hem traum de Rochester-Pean curva 1.jpeg",
                         "fotos/Pinça hem traum de Rochester-Pean curva 2.jpeg",
-                        "fotos/Pinça hem traum de Rochester-Pean curva 3.jpeg",
-                        "fotos/Pinça hem traum de Rochester-Pean curva 4.jpeg"
+                        "fotos/Pinça hem traum de Rochester-Pean curva 3.jpeg"
                     ],
         "respostas":  [
                           "fotos/Pinça hem traum de Rochester-Pean curva - Resp.jpeg"
@@ -408,24 +409,24 @@ window.QUIZ_ITEMS = [
     },
     {
         "id":  "tesoura-de-dissecacao-de-metzenbaum-curva-rr",
-        "nome_arquivo":  "Tesoura de dissecação de Metzenbaum curva RR",
-        "resposta":  "Tesoura de dissecação de Metzenbaum curva Romba-Romba",
+        "nome_arquivo":  "Tesoura de dissecção de Metzenbaum curva RR",
+        "resposta":  "Tesoura de dissecção de Metzenbaum curva Romba-Romba",
         "imagens":  [
-                        "fotos/Tesoura de dissecação de Metzenbaum curva RR.jpg"
+                        "fotos/Tesoura de dissecção de Metzenbaum curva RR.jpg"
                     ],
         "respostas":  [
-                          "fotos/Tesoura de dissecação de Metzenbaum curva RR - Resp.jpg"
+                          "fotos/Tesoura de dissecção de Metzenbaum curva RR - Resp.jpg"
                       ]
     },
     {
         "id":  "tesoura-de-dissecacao-de-metzenbaum-reta-rr",
-        "nome_arquivo":  "Tesoura de dissecação de Metzenbaum reta RR",
-        "resposta":  "Tesoura de dissecação de Metzenbaum reta Romba-Romba",
+        "nome_arquivo":  "Tesoura de dissecção de Metzenbaum reta RR",
+        "resposta":  "Tesoura de dissecção de Metzenbaum reta Romba-Romba",
         "imagens":  [
-                        "fotos/Tesoura de dissecação de Metzenbaum reta RR.jpg"
+                        "fotos/Tesoura de dissecção de Metzenbaum reta RR.jpg"
                     ],
         "respostas":  [
-                          "fotos/Tesoura de dissecação de Metzenbaum reta RR - Resp.jpg"
+                          "fotos/Tesoura de dissecção de Metzenbaum reta RR - Resp.jpg"
                       ]
     },
     {
