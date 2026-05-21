@@ -13,7 +13,17 @@
         <h1>Quiz de Técnica Cirúrgica</h1>
         <p id="progressText">Carregando imagens...</p>
       </div>
-      <div class="score">
+      <button id="menuToggleBtn" class="menuToggle" type="button" aria-label="Abrir menu" aria-controls="mobileMenu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="menuBackdrop" id="menuBackdrop" hidden></div>
+      <div class="score" id="mobileMenu">
+        <div class="mobileMenuHeader">
+          <strong>Menu</strong>
+          <button id="menuCloseBtn" class="menuClose" type="button" aria-label="Fechar menu">Fechar</button>
+        </div>
         <span id="scoreText">0 / 0</span>
         <div class="modeSwitch" aria-label="Modo do quiz">
           <button id="instrumentModeBtn" class="active" type="button">Instrumentais</button>

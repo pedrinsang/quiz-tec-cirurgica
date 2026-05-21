@@ -137,6 +137,10 @@ let appMode = "instrument";
 const els = {
   progressText: document.querySelector("#progressText"),
   scoreText: document.querySelector("#scoreText"),
+  menuToggleBtn: document.querySelector("#menuToggleBtn"),
+  menuCloseBtn: document.querySelector("#menuCloseBtn"),
+  menuBackdrop: document.querySelector("#menuBackdrop"),
+  mobileMenu: document.querySelector("#mobileMenu"),
   instrumentModeBtn: document.querySelector("#instrumentModeBtn"),
   sutureModeBtn: document.querySelector("#sutureModeBtn"),
   tableModeBtn: document.querySelector("#tableModeBtn"),
@@ -1049,8 +1053,21 @@ function updateSutureChrome() {
   els.scoreText.textContent = `${scored} avaliadas | média ${average}/3`;
 }
 
+function setMobileMenu(open) {
+  els.mobileMenu.classList.toggle("menuOpen", open);
+  document.body.classList.toggle("menuOpen", open);
+  els.menuBackdrop.hidden = !open;
+  els.menuToggleBtn.setAttribute("aria-expanded", String(open));
+  els.menuToggleBtn.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+}
+
+function closeMobileMenu() {
+  setMobileMenu(false);
+}
+
 function setAppMode(nextMode) {
   appMode = nextMode;
+  closeMobileMenu();
   const isSuture = appMode === "sutures";
   const isTable = appMode === "table";
 
@@ -1293,25 +1310,34 @@ els.nextBtn.addEventListener("click", nextItem);
 els.addCorrectBtn.addEventListener("click", () => adjustCurrentScore(1));
 els.removeCorrectBtn.addEventListener("click", () => adjustCurrentScore(-1));
 els.showAnswerBtn.addEventListener("click", showAnswer);
+els.menuToggleBtn.addEventListener("click", () => {
+  setMobileMenu(!els.mobileMenu.classList.contains("menuOpen"));
+});
+els.menuCloseBtn.addEventListener("click", closeMobileMenu);
+els.menuBackdrop.addEventListener("click", closeMobileMenu);
 els.instrumentModeBtn.addEventListener("click", () => setAppMode("instrument"));
 els.sutureModeBtn.addEventListener("click", () => setAppMode("sutures"));
 els.tableModeBtn.addEventListener("click", () => setAppMode("table"));
 els.shuffleBtn.addEventListener("click", () => {
   if (appMode === "sutures") {
     shuffleSutures();
+    closeMobileMenu();
     return;
   }
 
   if (appMode === "table") {
     resetTableQuiz();
+    closeMobileMenu();
     return;
   }
 
   shuffleItems();
+  closeMobileMenu();
 });
 els.studyBtn.addEventListener("click", () => {
   const section = appMode === "sutures" ? els.sutureStudySection : els.studySection;
   section.scrollIntoView({ behavior: "smooth", block: "start" });
+  closeMobileMenu();
 });
 els.showSutureAnswerBtn.addEventListener("click", showSutureAnswer);
 els.nextSutureBtn.addEventListener("click", nextSuture);
@@ -1328,6 +1354,11 @@ els.rubricButtons.addEventListener("click", (event) => {
 els.quadrantCountForm.addEventListener("submit", checkQuadrantCount);
 els.nextTableQuestionBtn.addEventListener("click", nextTableQuestion);
 els.restartTableBtn.addEventListener("click", resetTableQuiz);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeMobileMenu();
+  }
+});
 
 shuffleItemsSilently();
 renderItem();
