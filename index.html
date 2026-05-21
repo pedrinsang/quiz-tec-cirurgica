@@ -3,24 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quiz de Instrumentais Cirurgicos</title>
+  <title>Quiz de Técnica Cirúrgica</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <main class="app">
     <section class="topbar" aria-label="Controles do quiz">
       <div>
-        <h1>Quiz de Instrumentais Cirurgicos</h1>
+        <h1>Quiz de Técnica Cirúrgica</h1>
         <p id="progressText">Carregando imagens...</p>
       </div>
       <div class="score">
         <span id="scoreText">0 / 0</span>
+        <div class="modeSwitch" aria-label="Modo do quiz">
+          <button id="instrumentModeBtn" class="active" type="button">Instrumentais</button>
+          <button id="sutureModeBtn" type="button">Suturas</button>
+          <button id="tableModeBtn" type="button">Mesa cirúrgica</button>
+        </div>
         <button id="studyBtn" type="button">Tabela de estudo</button>
         <button id="shuffleBtn" type="button">Embaralhar</button>
       </div>
     </section>
 
-    <section class="workspace">
+    <section class="workspace" id="instrumentWorkspace">
       <div class="photoStage" id="photoStage" aria-live="polite"></div>
 
       <aside class="answerPanel">
@@ -46,7 +51,7 @@
 
         <div class="actions">
           <button id="showAnswerBtn" type="button">Ver resposta</button>
-          <button id="nextBtn" type="button">Proxima</button>
+          <button id="nextBtn" type="button">Próxima</button>
           <button id="addCorrectBtn" class="secondary" type="button">+1 acerto</button>
           <button id="removeCorrectBtn" class="secondary" type="button">-1 acerto</button>
         </div>
@@ -56,6 +61,84 @@
           <p id="correctAnswer"></p>
           <div id="responseImages" class="responseImages"></div>
         </section>
+      </aside>
+    </section>
+
+    <section class="sutureWorkspace" id="sutureWorkspace" hidden>
+      <section class="sutureCard" aria-live="polite">
+        <div class="sutureMeta" id="sutureMeta"></div>
+        <h2 id="sutureTitle">Sutura</h2>
+        <p id="suturePrompt"></p>
+
+        <label for="sutureAnswer">Treine sua fala ou escreva os pontos principais</label>
+        <textarea id="sutureAnswer" rows="7" spellcheck="false"></textarea>
+
+        <div class="sutureControls">
+          <button id="showSutureAnswerBtn" type="button">Ver gabarito</button>
+          <button id="nextSutureBtn" type="button">Próxima</button>
+        </div>
+
+        <section class="sutureRubric" id="sutureRubric" hidden>
+          <h3>Autoavaliação</h3>
+          <div class="rubricButtons" id="rubricButtons">
+            <button type="button" data-score="0">0</button>
+            <button type="button" data-score="1">1</button>
+            <button type="button" data-score="2">2</button>
+            <button type="button" data-score="3">3</button>
+          </div>
+          <p id="rubricHint">0 = travou, 1 = lembrou pouco, 2 = quase tudo, 3 = prova redonda.</p>
+        </section>
+      </section>
+
+      <aside class="sutureSide">
+        <section class="sutureModes">
+          <h2>Modo de treino</h2>
+          <div class="modeButtons" id="sutureModeButtons">
+            <button class="active" type="button" data-mode="oral">Sorteio oral</button>
+            <button type="button" data-mode="question">Perguntas</button>
+            <button type="button" data-mode="compare">Comparação</button>
+          </div>
+        </section>
+
+        <section class="sutureAnswerBox" id="sutureAnswerBox" hidden>
+          <h2>Gabarito</h2>
+          <div id="sutureAnswerContent"></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="tableWorkspace" id="tableWorkspace" hidden>
+      <section class="tablePromptCard">
+        <div class="sutureMeta" id="tableStageLabel">Mesa cirúrgica</div>
+        <h2 id="tableQuestionTitle">Preparação da mesa</h2>
+        <p id="tableQuestionText">Antes de montar a mesa, responda quantos quadrantes ela terá.</p>
+
+        <form id="quadrantCountForm" class="quadrantCountForm" autocomplete="off">
+          <label for="quadrantCountInput">Quantos quadrantes se separa a mesa?</label>
+          <input id="quadrantCountInput" type="number" min="1" max="12" inputmode="numeric">
+          <button type="submit">Conferir</button>
+        </form>
+
+        <div class="tableFeedback" id="tableFeedback" aria-live="polite"></div>
+
+        <section class="tableGroupPrompt" id="tableGroupPrompt" hidden>
+          <h3 id="tableGroupTitle">Grupo</h3>
+          <p id="tableGroupHint"></p>
+          <div class="tableGroupImages" id="tableGroupImages"></div>
+        </section>
+
+        <div class="tableActions">
+          <button id="nextTableQuestionBtn" type="button" hidden>Próxima pergunta</button>
+          <button id="restartTableBtn" class="secondary" type="button">Recomeçar mesa</button>
+        </div>
+      </section>
+
+      <aside class="tableBoardPanel" id="tableBoardPanel" hidden>
+        <div class="tableBoardHeader">
+          <h2>Mesa virtual</h2>
+          <p id="tableScoreText">0 / 0</p>
+        </div>
+        <div class="surgicalTable" id="surgicalTable" aria-label="Mesa cirúrgica virtual"></div>
       </aside>
     </section>
 
@@ -74,9 +157,20 @@
         </aside>
       </div>
     </section>
+
+    <section class="studySection" id="sutureStudySection" hidden>
+      <div class="studyHeader">
+        <div>
+          <h2>Tabela de suturas</h2>
+          <p>Resumo para revisar categoria, trajeto, uso e pegadinhas de prova.</p>
+        </div>
+      </div>
+      <div class="sutureStudyTable" id="sutureStudyTable"></div>
+    </section>
   </main>
 
   <script src="quiz-data.js" charset="utf-8"></script>
+  <script src="suturas-data.js" charset="utf-8"></script>
   <script src="app.js"></script>
 </body>
 </html>

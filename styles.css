@@ -1,34 +1,49 @@
 :root {
-  --bg: #f6f7f4;
-  --panel: #ffffff;
-  --ink: #17201c;
-  --muted: #66736e;
-  --line: #d7ddd7;
-  --accent: #1f7a6b;
-  --accent-strong: #14594e;
-  --danger: #a33a32;
-  --ok: #267348;
-  --warn: #9a6a13;
-  --soft-danger: #f8dedb;
-  --soft-ok: #dff1e5;
-  --soft-warn: #fff0c9;
-  --gold: #c38b21;
-  --shadow: 0 16px 40px rgba(20, 40, 35, .12);
+  --bg: #101716;
+  --panel: #17211f;
+  --panel-soft: #1d2927;
+  --ink: #edf4f1;
+  --muted: #9aa9a4;
+  --line: #2d3d39;
+  --line-strong: #40534d;
+  --accent: #3bb6a3;
+  --accent-strong: #75d8c8;
+  --accent-soft: #223a36;
+  --danger: #f07f76;
+  --ok: #73d59a;
+  --warn: #e2b968;
+  --soft-danger: #3d2524;
+  --soft-ok: #20382b;
+  --soft-warn: #3c3220;
+  --gold: #d7ae64;
+  --gold-soft: #332b1d;
+  --blue: #7f9fbd;
+  --blue-soft: #202c36;
+  --shadow: 0 24px 60px rgba(0, 0, 0, .34);
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, .24);
 }
 
 * {
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at top left, rgba(59, 182, 163, .12), transparent 320px),
+    linear-gradient(180deg, #121b19 0%, #0d1312 100%);
   color: var(--ink);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, "Segoe UI", Arial, Helvetica, sans-serif;
+  line-height: 1.4;
 }
 
 button,
-textarea {
+textarea,
+input {
   font: inherit;
 }
 
@@ -37,17 +52,34 @@ button {
   border: 1px solid var(--accent);
   border-radius: 8px;
   background: var(--accent);
-  color: #fff;
+  color: #06100e;
   padding: 0 16px;
   cursor: pointer;
+  font-weight: 700;
+  transition: background-color .16s ease, border-color .16s ease, color .16s ease, transform .16s ease, box-shadow .16s ease;
 }
 
 button:hover {
   background: var(--accent-strong);
+  color: #071210;
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+button:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(23, 112, 101, .22);
+  outline-offset: 2px;
 }
 
 button.secondary {
-  background: #fff;
+  background: var(--panel-soft);
   color: var(--accent);
 }
 
@@ -58,13 +90,27 @@ button.secondary {
 }
 
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 18px clamp(16px, 4vw, 34px);
+  padding: 16px clamp(16px, 4vw, 34px);
   border-bottom: 1px solid var(--line);
-  background: #fff;
+  background: rgba(16, 23, 22, .86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .03), 0 16px 32px rgba(0, 0, 0, .24);
+  animation: topbarDrop .42s ease both;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: var(--accent);
 }
 
 h1 {
@@ -82,6 +128,10 @@ p {
   color: var(--muted);
 }
 
+.topbar p {
+  font-size: .95rem;
+}
+
 .score {
   display: flex;
   align-items: center;
@@ -90,10 +140,54 @@ p {
   justify-content: flex-end;
 }
 
+.modeSwitch,
+.modeButtons,
+.rubricButtons,
+.sutureControls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.modeSwitch {
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+.modeSwitch button,
+.modeButtons button,
+.rubricButtons button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink);
+}
+
+.modeSwitch button:hover,
+.modeSwitch button.active,
+.modeButtons button:hover,
+.modeButtons button.active,
+.rubricButtons button:hover,
+.rubricButtons button.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #06100e;
+  box-shadow: none;
+}
+
 .score span {
-  min-width: 72px;
+  min-width: 112px;
   font-weight: 700;
-  text-align: right;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  padding: 9px 12px;
+  color: var(--accent-strong);
 }
 
 .workspace {
@@ -111,6 +205,11 @@ p {
   align-content: start;
 }
 
+.photoStage,
+.answerPanel {
+  position: relative;
+}
+
 .photoGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
@@ -122,10 +221,18 @@ p {
   width: 100%;
   max-height: 72vh;
   object-fit: contain;
-  background: #e7ece8;
+  background: #111918;
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.photoGrid img:hover,
+.responseImages img:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 20px 48px rgba(20, 40, 35, .14);
+  transform: translateY(-2px);
 }
 
 .answerPanel {
@@ -139,6 +246,27 @@ p {
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: panelRise .38s ease both;
+}
+
+.answerPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--accent);
+}
+
+.answerPanel,
+.studyPreview,
+.sutureCard,
+.sutureModes,
+.sutureAnswerBox,
+.sutureStudyGroup,
+.finishBox {
+  outline: 1px solid rgba(255, 255, 255, .035);
+  outline-offset: -2px;
 }
 
 form {
@@ -148,6 +276,7 @@ form {
 
 label {
   font-weight: 700;
+  color: var(--accent-strong);
 }
 
 textarea {
@@ -158,9 +287,22 @@ textarea {
   border-radius: 8px;
   padding: 12px;
   color: var(--ink);
+  background: #101716;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
 }
 
-textarea:focus {
+input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--ink);
+  background: #101716;
+}
+
+textarea:focus,
+input:focus {
   outline: 3px solid rgba(31, 122, 107, .18);
   border-color: var(--accent);
 }
@@ -168,19 +310,25 @@ textarea:focus {
 .feedback {
   min-height: 48px;
   border-left: 4px solid var(--line);
-  padding: 6px 0 6px 12px;
+  border-radius: 8px;
+  background: var(--panel-soft);
+  padding: 10px 12px;
 }
 
 .feedback.ok {
   color: var(--ok);
   border-color: var(--ok);
   font-weight: 700;
+  background: var(--soft-ok);
+  animation: feedbackPulse .34s ease both;
 }
 
 .feedback.error {
   color: var(--danger);
   border-color: var(--danger);
   font-weight: 700;
+  background: var(--soft-danger);
+  animation: feedbackShake .34s ease both;
 }
 
 .actions {
@@ -196,14 +344,24 @@ textarea:focus {
 .actions button:first-child,
 #shuffleBtn,
 #studyBtn {
-  background: #fff;
+  background: var(--panel-soft);
   color: var(--accent);
+}
+
+.actions button:first-child:hover,
+#shuffleBtn:hover,
+#studyBtn:hover,
+button.secondary:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-strong);
 }
 
 .correctionBox,
 .responseBox {
   border-top: 1px solid var(--line);
   padding-top: 14px;
+  animation: revealBlock .28s ease both;
 }
 
 .correctionBox h2,
@@ -217,6 +375,10 @@ textarea:focus {
   display: grid;
   gap: 6px;
   margin-bottom: 10px;
+  border-radius: 8px;
+  background: var(--panel-soft);
+  padding: 10px;
+  border: 1px solid var(--line);
 }
 
 .correctionRow > span {
@@ -257,7 +419,7 @@ textarea:focus {
 }
 
 .mark.mixed {
-  background: #fff;
+  background: var(--panel-soft);
   border: 1px solid var(--line);
 }
 
@@ -290,6 +452,8 @@ textarea:focus {
 }
 
 .finishBox {
+  position: relative;
+  overflow: hidden;
   align-self: center;
   justify-self: center;
   width: min(620px, 100%);
@@ -299,6 +463,14 @@ textarea:focus {
   border-radius: 8px;
   box-shadow: var(--shadow);
   text-align: center;
+}
+
+.finishBox::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--accent);
 }
 
 .finishBox h2 {
@@ -322,6 +494,62 @@ textarea:focus {
   font-weight: 700;
 }
 
+.perfectFinish {
+  border-color: rgba(59, 182, 163, .55);
+  box-shadow: 0 0 0 1px rgba(59, 182, 163, .18), 0 26px 80px rgba(0, 0, 0, .42);
+  animation: perfectPop .62s cubic-bezier(.2, .9, .2, 1.08) both;
+}
+
+.perfectFinish::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle, rgba(59, 182, 163, .18), transparent 34%);
+  opacity: 0;
+  animation: finishGlow 1.35s ease .18s both;
+  pointer-events: none;
+}
+
+.perfectMessage {
+  margin-top: 12px;
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.celebrationBurst {
+  position: absolute;
+  inset: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.celebrationBurst span {
+  position: absolute;
+  width: 7px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0;
+  transform: rotate(var(--angle)) translateY(0) scale(.5);
+  animation: burstPiece .95s cubic-bezier(.18, .86, .3, 1) var(--delay) both;
+}
+
+.celebrationBurst span:nth-child(3n) {
+  background: var(--gold);
+}
+
+.celebrationBurst span:nth-child(4n) {
+  background: var(--accent-strong);
+  width: 5px;
+  height: 10px;
+}
+
+.finishBox h2,
+.finishBox p {
+  position: relative;
+  z-index: 1;
+}
+
 .studySection {
   padding: 0 clamp(16px, 4vw, 34px) clamp(22px, 4vw, 34px);
 }
@@ -329,6 +557,11 @@ textarea:focus {
 .studyHeader {
   padding: 18px 0 12px;
   border-top: 1px solid var(--line);
+}
+
+.studyHeader > div {
+  border-left: 5px solid var(--accent);
+  padding-left: 12px;
 }
 
 .studyHeader h2,
@@ -358,17 +591,40 @@ textarea:focus {
 }
 
 .studyGroup {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
   gap: 14px;
-  padding: 12px;
+  padding: 14px;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+.studyGroup:hover,
+.sutureStudyGroup:hover,
+.sutureModes:hover,
+.sutureAnswerBox:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.studyGroup::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: var(--accent-soft);
 }
 
 .studyGeneral {
   font-weight: 700;
+  color: var(--accent-strong);
+  padding-left: 4px;
 }
 
 .studyVariants {
@@ -382,16 +638,17 @@ textarea:focus {
   max-width: 100%;
   padding: 0 12px;
   border-color: var(--line);
-  background: #fff;
+  background: var(--panel-soft);
   color: var(--ink);
   text-align: left;
+  font-weight: 600;
 }
 
 .variantBtn:hover,
 .variantBtn.active {
   border-color: var(--accent);
   background: var(--accent);
-  color: #fff;
+  color: #06100e;
 }
 
 .studyPreview {
@@ -404,10 +661,594 @@ textarea:focus {
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: panelRise .38s ease both;
+}
+
+.studyPreview::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--accent);
 }
 
 .studyPreview h3 {
   font-size: 1rem;
+  color: var(--accent-strong);
+  padding-top: 4px;
+}
+
+.sutureWorkspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 430px);
+  gap: 20px;
+  padding: clamp(16px, 4vw, 34px);
+}
+
+.tableWorkspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
+  gap: 20px;
+  padding: clamp(16px, 4vw, 34px);
+}
+
+.tablePromptCard,
+.tableBoardPanel {
+  position: relative;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  outline: 1px solid rgba(255, 255, 255, .035);
+  outline-offset: -2px;
+  animation: panelRise .38s ease both;
+}
+
+.tablePromptCard::before,
+.tableBoardPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--accent);
+}
+
+.tablePromptCard {
+  align-self: start;
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+}
+
+.tablePromptCard h2,
+.tableBoardHeader h2,
+.tableGroupPrompt h3 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.tablePromptCard > p,
+.tableBoardHeader p,
+.tableGroupPrompt p {
+  color: var(--muted);
+}
+
+.quadrantCountForm {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.quadrantCountForm label {
+  grid-column: 1 / -1;
+}
+
+.tableFeedback {
+  position: relative;
+  min-height: 48px;
+  border-left: 4px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  color: var(--muted);
+  padding: 10px 12px;
+  overflow: hidden;
+}
+
+.tableFeedback.ok {
+  border-color: var(--ok);
+  background: var(--soft-ok);
+  color: var(--ok);
+  font-weight: 700;
+  animation: feedbackPulse .34s ease both;
+}
+
+.tableFeedback.error {
+  border-color: var(--danger);
+  background: var(--soft-danger);
+  color: var(--danger);
+  font-weight: 700;
+  animation: feedbackShake .34s ease both;
+}
+
+.perfectTableFeedback {
+  min-height: 86px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.perfectTableFeedback .celebrationBurst {
+  z-index: 0;
+}
+
+.perfectTableFeedback span {
+  position: relative;
+  z-index: 1;
+}
+
+.tableGroupPrompt {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  animation: revealBlock .28s ease both;
+}
+
+.tableGroupImages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  gap: 8px;
+}
+
+.tableGroupImages img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111918;
+  box-shadow: var(--shadow-soft);
+}
+
+.tableMaterialChip {
+  min-height: 72px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  color: var(--accent-strong);
+  padding: 10px;
+  text-align: center;
+  font-size: .86rem;
+  font-weight: 700;
+}
+
+.tableActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tableActions button {
+  flex: 1 1 160px;
+}
+
+.tableBoardPanel {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  padding: 22px;
+}
+
+.tableBoardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.tableBoardHeader p {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  color: var(--accent-strong);
+  font-weight: 700;
+  padding: 8px 10px;
+}
+
+.surgicalTable {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.quadrantCell {
+  min-height: 190px;
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 10px;
+  padding: 16px;
+  border-color: var(--line);
+  background: var(--panel-soft);
+  color: var(--ink);
+  text-align: left;
+  box-shadow: none;
+}
+
+.quadrantCell:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.quadrantCell strong {
+  font-size: clamp(1rem, 2vw, 1.28rem);
+  color: var(--accent-strong);
+}
+
+.quadrantCell small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.quadrantPosition {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 8px;
+  color: var(--muted);
+  font-size: .78rem;
+  text-transform: uppercase;
+}
+
+.quadrantCell.correct {
+  border-color: var(--ok);
+  background: var(--soft-ok);
+  animation: feedbackPulse .34s ease both;
+}
+
+.quadrantCell.wrong {
+  border-color: var(--danger);
+  background: var(--soft-danger);
+  animation: feedbackShake .34s ease both;
+}
+
+.quadrantCell.expected {
+  border-color: var(--ok);
+  box-shadow: inset 0 0 0 2px rgba(115, 213, 154, .28);
+}
+
+.sutureCard,
+.sutureSide,
+.sutureModes,
+.sutureAnswerBox,
+.sutureStudyGroup {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.sutureCard {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: clamp(18px, 4vw, 30px);
+  animation: panelRise .38s ease both;
+}
+
+.sutureCard::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--accent);
+}
+
+.sutureMeta {
+  justify-self: start;
+  color: var(--accent-strong);
+  font-size: .9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(59, 182, 163, .12);
+  padding: 7px 10px;
+}
+
+.sutureCard h2 {
+  margin: 0;
+  font-size: clamp(1.7rem, 4vw, 2.7rem);
+  letter-spacing: 0;
+}
+
+.sutureCard > p {
+  max-width: 78ch;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 1.04rem;
+}
+
+.sutureControls button {
+  flex: 1 1 170px;
+}
+
+.sutureSide {
+  position: sticky;
+  top: 18px;
+  display: grid;
+  gap: 14px;
+  align-self: start;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.sutureModes,
+.sutureAnswerBox {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+.sutureModes h2,
+.sutureAnswerBox h2,
+.sutureRubric h3 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+.sutureRubric {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+#rubricHint {
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.45;
+}
+
+.rubricButtons button {
+  min-width: 46px;
+  border-color: var(--line);
+  background: var(--panel-soft);
+  color: var(--accent-strong);
+}
+
+#sutureAnswerContent,
+.sutureAnswerBox {
+  min-width: 0;
+}
+
+.sutureAnswerCard {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  animation: revealBlock .26s ease both;
+}
+
+.sutureAnswerCard + .sutureAnswerCard {
+  margin-top: 12px;
+}
+
+.sutureAnswerCard:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.sutureAnswerCard h3 {
+  margin: 0;
+  color: var(--gold);
+  font-size: 1.08rem;
+}
+
+.answerLine {
+  display: grid;
+  gap: 4px;
+}
+
+.answerLine strong {
+  color: var(--accent-strong);
+  font-size: .88rem;
+  text-transform: uppercase;
+}
+
+.answerLine p,
+.answerLine li {
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.answerLine ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.sutureStudyTable {
+  display: grid;
+  gap: 14px;
+}
+
+.sutureStudyGroup {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+}
+
+.sutureStudyGroup h3 {
+  margin: 0;
+  letter-spacing: 0;
+  color: var(--accent-strong);
+}
+
+.sutureStudyItem {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.sutureStudyItem summary {
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: var(--ink);
+}
+
+.sutureStudyItem summary:hover {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.sutureStudyItem .answerLine {
+  margin-top: 10px;
+}
+
+.enterMotion {
+  animation: contentSlide .34s ease both;
+}
+
+@keyframes topbarDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contentSlide {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes revealBlock {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes feedbackPulse {
+  0% {
+    transform: scale(.99);
+    box-shadow: 0 0 0 0 rgba(115, 213, 154, .32);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(115, 213, 154, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: none;
+  }
+}
+
+@keyframes feedbackShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes perfectPop {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(.96);
+  }
+  70% {
+    transform: translateY(0) scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes finishGlow {
+  0% {
+    opacity: 0;
+    transform: scale(.7);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes burstPiece {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(0) scale(.4);
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(calc(var(--distance) * -1)) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
 }
 
 @media (max-width: 900px) {
@@ -418,20 +1259,63 @@ textarea:focus {
 
   .score {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+  }
+
+  .score span {
+    text-align: left;
   }
 
   .workspace,
+  .sutureWorkspace,
+  .tableWorkspace,
   .studyLayout {
     grid-template-columns: 1fr;
   }
 
   .answerPanel,
-  .studyPreview {
+  .studyPreview,
+  .sutureSide {
     position: static;
   }
 
   .studyGroup {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .score,
+  .modeSwitch,
+  .modeButtons,
+  .sutureControls,
+  .actions {
+    width: 100%;
+  }
+
+  .modeSwitch button,
+  .modeButtons button,
+  .sutureControls button,
+  .actions button,
+  #studyBtn,
+  #shuffleBtn {
+    flex: 1 1 auto;
+  }
+
+  .score span {
+    width: 100%;
+  }
+
+  .quadrantCountForm,
+  .surgicalTable {
+    grid-template-columns: 1fr;
+  }
+
+  .surgicalTable {
+    grid-template-rows: none;
+  }
+
+  .quadrantCell {
+    min-height: 150px;
   }
 }

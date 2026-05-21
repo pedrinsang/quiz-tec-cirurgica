@@ -4,9 +4,146 @@ const state = {
   correct: new Set(),
 };
 
+const sutureState = {
+  items: Array.isArray(window.SUTURE_ITEMS) ? [...window.SUTURE_ITEMS] : [],
+  comparisons: Array.isArray(window.SUTURE_COMPARISONS) ? [...window.SUTURE_COMPARISONS] : [],
+  index: 0,
+  comparisonIndex: 0,
+  mode: "oral",
+  scores: new Map(),
+  currentQuestion: "",
+};
+
+const tableQuadrants = [
+  {
+    id: "campos",
+    nome: "Campos e materiais de apoio",
+    posicao: "superior esquerdo",
+    descricao: "Pinça de Backhaus, compressas, panos de campo, cubas e materiais de apoio.",
+  },
+  {
+    id: "auxiliar",
+    nome: "Auxiliar",
+    posicao: "superior central",
+    descricao: "Instrumentos auxiliares usados para apoio, exposição e organização do campo.",
+  },
+  {
+    id: "especial",
+    nome: "Especial",
+    posicao: "superior direito",
+    descricao: "Instrumentais específicos ou menos rotineiros da cirurgia.",
+  },
+  {
+    id: "dierese",
+    nome: "Diérese",
+    posicao: "inferior esquerdo",
+    descricao: "Instrumentos de corte e separação de tecidos.",
+  },
+  {
+    id: "hemostasia",
+    nome: "Hemostasia",
+    posicao: "inferior central",
+    descricao: "Pinças usadas para clampear vasos e controlar sangramento.",
+  },
+  {
+    id: "sintese",
+    nome: "Síntese",
+    posicao: "inferior direito",
+    descricao: "Instrumentos usados no fechamento e na sutura.",
+  },
+];
+
+const tableGroupRules = [
+  {
+    id: "cabos-bisturi",
+    nome: "Cabos de bisturi",
+    quadrantId: "dierese",
+    examples: ["Cabo de bisturi n° 3", "Cabo de bisturi n° 4"],
+    match: (text) => text.includes("bisturi"),
+  },
+  {
+    id: "tesouras",
+    nome: "Tesouras cirúrgicas",
+    quadrantId: "dierese",
+    examples: ["Tesoura de Mayo", "Tesoura Metzenbaum", "Tesoura operacional"],
+    match: (text) => text.includes("tesoura"),
+  },
+  {
+    id: "hemostaticas",
+    nome: "Pinças hemostáticas",
+    quadrantId: "hemostasia",
+    examples: ["Kelly", "Crile", "Halsted", "Rochester-Pean", "Kocher"],
+    match: (text) => text.includes("hemostatic"),
+  },
+  {
+    id: "pincas-preensao",
+    nome: "Pinças de preensão",
+    quadrantId: "auxiliar",
+    examples: ["Pinça de dissecção", "Allis", "Adson"],
+    match: (text) => text.includes("disseccao") || text.includes("tecidual"),
+  },
+  {
+    id: "backhaus-campos",
+    nome: "Backhaus, panos cirúrgicos e compressas",
+    quadrantId: "campos",
+    examples: ["Pinça Backhaus", "Panos cirúrgicos", "Compressas"],
+    match: (text) => text.includes("backhaus"),
+  },
+  {
+    id: "afastadores",
+    nome: "Afastadores",
+    quadrantId: "auxiliar",
+    examples: ["Farabeuf", "Langenbeck", "Balfour", "Finochietto", "Gelpi", "Weitlanner"],
+    match: (text) => text.includes("afastador"),
+  },
+  {
+    id: "instrumentais-especiais",
+    nome: "Instrumentais especiais",
+    quadrantId: "especial",
+    examples: ["Clamp de Doyen", "Clamp para conchectomia", "Cabo em T para fio serra Gigli", "Tentacânula"],
+    match: (text) => (
+      text.includes("clamp") ||
+      text.includes("gigli") ||
+      text.includes("periosteo") ||
+      text.includes("estilete") ||
+      text.includes("aspirador") ||
+      text.includes("tentacanula")
+    ),
+  },
+  {
+    id: "porta-agulhas",
+    nome: "Porta-agulhas",
+    quadrantId: "sintese",
+    examples: ["Mayo-Hegar", "Olsen-Hegar", "Mathieu"],
+    match: (text) => text.includes("porta agulha"),
+  },
+];
+
+const tableState = {
+  stage: "count",
+  quadrantQueue: [],
+  groupQueue: [],
+  currentQuadrant: null,
+  currentGroup: null,
+  score: 0,
+  answered: 0,
+  total: tableQuadrants.length + tableGroupRules.length,
+  locked: false,
+  revealed: false,
+};
+
+let appMode = "instrument";
+
 const els = {
   progressText: document.querySelector("#progressText"),
   scoreText: document.querySelector("#scoreText"),
+  instrumentModeBtn: document.querySelector("#instrumentModeBtn"),
+  sutureModeBtn: document.querySelector("#sutureModeBtn"),
+  tableModeBtn: document.querySelector("#tableModeBtn"),
+  instrumentWorkspace: document.querySelector("#instrumentWorkspace"),
+  sutureWorkspace: document.querySelector("#sutureWorkspace"),
+  tableWorkspace: document.querySelector("#tableWorkspace"),
+  sutureStudySection: document.querySelector("#sutureStudySection"),
   photoStage: document.querySelector("#photoStage"),
   studyBtn: document.querySelector("#studyBtn"),
   studySection: document.querySelector("#studySection"),
@@ -27,6 +164,33 @@ const els = {
   removeCorrectBtn: document.querySelector("#removeCorrectBtn"),
   showAnswerBtn: document.querySelector("#showAnswerBtn"),
   shuffleBtn: document.querySelector("#shuffleBtn"),
+  sutureMeta: document.querySelector("#sutureMeta"),
+  sutureTitle: document.querySelector("#sutureTitle"),
+  suturePrompt: document.querySelector("#suturePrompt"),
+  sutureAnswer: document.querySelector("#sutureAnswer"),
+  showSutureAnswerBtn: document.querySelector("#showSutureAnswerBtn"),
+  nextSutureBtn: document.querySelector("#nextSutureBtn"),
+  sutureRubric: document.querySelector("#sutureRubric"),
+  rubricButtons: document.querySelector("#rubricButtons"),
+  sutureModeButtons: document.querySelector("#sutureModeButtons"),
+  sutureAnswerBox: document.querySelector("#sutureAnswerBox"),
+  sutureAnswerContent: document.querySelector("#sutureAnswerContent"),
+  sutureStudyTable: document.querySelector("#sutureStudyTable"),
+  tableStageLabel: document.querySelector("#tableStageLabel"),
+  tableQuestionTitle: document.querySelector("#tableQuestionTitle"),
+  tableQuestionText: document.querySelector("#tableQuestionText"),
+  quadrantCountForm: document.querySelector("#quadrantCountForm"),
+  quadrantCountInput: document.querySelector("#quadrantCountInput"),
+  tableFeedback: document.querySelector("#tableFeedback"),
+  tableGroupPrompt: document.querySelector("#tableGroupPrompt"),
+  tableGroupTitle: document.querySelector("#tableGroupTitle"),
+  tableGroupHint: document.querySelector("#tableGroupHint"),
+  tableGroupImages: document.querySelector("#tableGroupImages"),
+  tableBoardPanel: document.querySelector("#tableBoardPanel"),
+  nextTableQuestionBtn: document.querySelector("#nextTableQuestionBtn"),
+  restartTableBtn: document.querySelector("#restartTableBtn"),
+  surgicalTable: document.querySelector("#surgicalTable"),
+  tableScoreText: document.querySelector("#tableScoreText"),
 };
 
 function stripAccents(value) {
@@ -235,7 +399,7 @@ function currentItem() {
 function renderImages(target, images) {
   target.innerHTML = "";
   const grid = document.createElement("div");
-  grid.className = "photoGrid";
+  grid.className = "photoGrid enterMotion";
 
   images.forEach((src, imageIndex) => {
     const img = document.createElement("img");
@@ -373,12 +537,22 @@ function renderStudyTable() {
 }
 
 function updateChrome() {
+  if (appMode === "sutures") {
+    updateSutureChrome();
+    return;
+  }
+
+  if (appMode === "table") {
+    updateTableChrome();
+    return;
+  }
+
   const total = state.items.length;
   const percentage = total ? Math.round((state.correct.size / total) * 100) : 0;
   els.progressText.textContent = total
     ? state.index >= total
       ? "Quiz finalizado"
-      : `Questao ${state.index + 1} de ${total}`
+      : `Questão ${state.index + 1} de ${total}`
     : "Nenhum item encontrado. Gere quiz-data.js primeiro.";
   els.scoreText.textContent = `${state.correct.size} / ${total} (${percentage}%)`;
 }
@@ -422,16 +596,30 @@ function renderItem() {
 function renderFinish() {
   const total = state.items.length;
   const percentage = total ? Math.round((state.correct.size / total) * 100) : 0;
+  const isPerfect = total > 0 && state.correct.size === total;
 
   els.photoStage.innerHTML = "";
   const finish = document.createElement("section");
-  finish.className = "finishBox";
+  finish.className = `finishBox enterMotion${isPerfect ? " perfectFinish" : ""}`;
   finish.innerHTML = `
+    ${isPerfect ? renderCelebrationBurst() : ""}
     <h2>Quiz acabou!</h2>
-    <p>Voce acertou <strong>${state.correct.size}</strong> de <strong>${total}</strong> instrumentos.</p>
+    <p>Você acertou <strong>${state.correct.size}</strong> de <strong>${total}</strong> instrumentos.</p>
     <p class="finishPercent">${percentage}% de acertos</p>
+    ${isPerfect ? "<p class=\"perfectMessage\">Gabaritou os instrumentais.</p>" : ""}
   `;
   els.photoStage.append(finish);
+}
+
+function renderCelebrationBurst() {
+  const pieces = Array.from({ length: 34 }, (_, index) => {
+    const angle = Math.round((360 / 34) * index);
+    const distance = 90 + (index % 7) * 13;
+    const delay = (index % 9) * 45;
+    return `<span style="--angle:${angle}deg; --distance:${distance}px; --delay:${delay}ms"></span>`;
+  }).join("");
+
+  return `<div class="celebrationBurst" aria-hidden="true">${pieces}</div>`;
 }
 
 function showAnswer() {
@@ -513,16 +701,635 @@ function shuffleItemsSilently() {
   state.index = 0;
 }
 
+function shuffleCopy(items) {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function tableGroupItems(group) {
+  return state.items.filter((item) => {
+    const text = `${normalizeAnswer(item.resposta)} ${normalizeAnswer(item.nome_arquivo || "")}`;
+    return group.match(text);
+  });
+}
+
+function updateTableChrome() {
+  const percentage = tableState.answered
+    ? Math.round((tableState.score / tableState.answered) * 100)
+    : 0;
+
+  els.progressText.textContent = "Montagem da mesa cirúrgica";
+  els.scoreText.textContent = `${tableState.score} / ${tableState.answered} (${percentage}%)`;
+  els.tableScoreText.textContent = `${tableState.score} / ${tableState.answered} - ${percentage}%`;
+}
+
+function resetTableQuiz() {
+  tableState.stage = "count";
+  tableState.quadrantQueue = shuffleCopy(tableQuadrants);
+  tableState.groupQueue = shuffleCopy(tableGroupRules);
+  tableState.currentQuadrant = null;
+  tableState.currentGroup = null;
+  tableState.score = 0;
+  tableState.answered = 0;
+  tableState.locked = false;
+  tableState.revealed = false;
+
+  els.quadrantCountInput.value = "";
+  els.tableBoardPanel.hidden = true;
+  els.surgicalTable.innerHTML = "";
+  renderTableStage();
+}
+
+function renderSurgicalTable(showLabels = false) {
+  els.surgicalTable.innerHTML = "";
+  tableQuadrants.forEach((quadrant) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "quadrantCell";
+    button.dataset.quadrant = quadrant.id;
+    button.innerHTML = `
+      <span class="quadrantPosition">${quadrant.posicao}</span>
+      <strong>${showLabels ? quadrant.nome : "Quadrante"}</strong>
+      <small>${showLabels ? quadrant.descricao : "Aguardando resposta"}</small>
+    `;
+    button.addEventListener("click", () => handleQuadrantClick(quadrant.id));
+    els.surgicalTable.append(button);
+  });
+}
+
+function revealQuadrantLabel(quadrantId) {
+  const quadrant = tableQuadrants.find((item) => item.id === quadrantId);
+  const cell = els.surgicalTable.querySelector(`[data-quadrant="${quadrantId}"]`);
+  if (!quadrant || !cell) return;
+
+  const title = cell.querySelector("strong");
+  const description = cell.querySelector("small");
+  title.textContent = quadrant.nome;
+  description.textContent = quadrant.descricao;
+}
+
+function setTableFeedback(type, message) {
+  els.tableFeedback.className = `tableFeedback ${type}`;
+  els.tableFeedback.textContent = message;
+}
+
+function renderTableStage() {
+  updateTableChrome();
+  els.nextTableQuestionBtn.hidden = true;
+  els.tableGroupPrompt.hidden = true;
+  els.tableGroupImages.innerHTML = "";
+  els.tableFeedback.className = "tableFeedback";
+  els.tableFeedback.textContent = "";
+
+  if (tableState.stage === "count") {
+    els.tableStageLabel.textContent = "Etapa 1";
+    els.tableQuestionTitle.textContent = "Quantidade de quadrantes";
+    els.tableQuestionText.textContent = "Antes de montar a mesa, responda quantos quadrantes serão separados.";
+    els.quadrantCountForm.hidden = false;
+    els.quadrantCountInput.disabled = false;
+    els.quadrantCountInput.focus();
+    return;
+  }
+
+  els.quadrantCountForm.hidden = true;
+
+  if (tableState.stage === "quadrants") {
+    nextQuadrantQuestion();
+    return;
+  }
+
+  if (tableState.stage === "groups") {
+    nextGroupQuestion();
+    return;
+  }
+
+  renderTableFinish();
+}
+
+function checkQuadrantCount(event) {
+  event.preventDefault();
+  const value = Number(els.quadrantCountInput.value);
+
+  tableState.answered += 1;
+  if (value === tableQuadrants.length) {
+    tableState.score += 1;
+    tableState.revealed = true;
+    els.tableBoardPanel.hidden = false;
+    renderSurgicalTable(false);
+    setTableFeedback("ok", "Correto. A mesa será separada em 6 quadrantes.");
+    tableState.stage = "quadrants";
+    els.quadrantCountInput.disabled = true;
+    els.quadrantCountForm.hidden = true;
+    els.nextTableQuestionBtn.hidden = false;
+  } else {
+    tableState.revealed = true;
+    els.tableBoardPanel.hidden = false;
+    renderSurgicalTable(false);
+    setTableFeedback("error", "Quase. O gabarito é 6 quadrantes: 3 colunas por 2 linhas.");
+    tableState.stage = "quadrants";
+    els.quadrantCountInput.disabled = true;
+    els.quadrantCountForm.hidden = true;
+    els.nextTableQuestionBtn.hidden = false;
+  }
+
+  updateTableChrome();
+}
+
+function nextQuadrantQuestion() {
+  tableState.locked = false;
+  els.quadrantCountForm.hidden = true;
+  renderSurgicalTable(false);
+
+  const next = tableState.quadrantQueue.shift();
+  if (!next) {
+    tableState.stage = "groups";
+    nextGroupQuestion();
+    return;
+  }
+
+  tableState.currentQuadrant = next;
+  els.tableStageLabel.textContent = "Etapa 2";
+  els.tableQuestionTitle.textContent = "Nome dos quadrantes";
+  els.tableQuestionText.textContent = `Clique no quadrante: ${next.nome}.`;
+}
+
+function nextGroupQuestion() {
+  tableState.locked = false;
+  renderSurgicalTable(false);
+
+  const next = tableState.groupQueue.shift();
+  if (!next) {
+    tableState.stage = "done";
+    renderTableFinish();
+    return;
+  }
+
+  tableState.currentGroup = next;
+  const quadrant = tableQuadrants.find((item) => item.id === next.quadrantId);
+  const items = tableGroupItems(next).slice(0, 4);
+
+  els.tableStageLabel.textContent = "Etapa 3";
+  els.tableQuestionTitle.textContent = "Posicionamento dos grupos";
+  els.tableQuestionText.textContent = "Clique no quadrante onde este grupo deve ficar.";
+  els.tableGroupPrompt.hidden = false;
+  els.tableGroupTitle.textContent = next.nome;
+  els.tableGroupHint.textContent = "Observe os exemplos e escolha o quadrante correto da mesa.";
+  renderTableGroupImages(items, next.examples || []);
+
+  if (!quadrant) {
+    setTableFeedback("error", "Este grupo não tem quadrante configurado.");
+  }
+}
+
+function renderTableGroupImages(items, examples = []) {
+  els.tableGroupImages.innerHTML = "";
+  items.forEach((item) => {
+    const img = document.createElement("img");
+    img.src = encodeURI(item.imagens[0]);
+    img.alt = item.resposta;
+    img.title = item.resposta;
+    els.tableGroupImages.append(img);
+  });
+
+  examples.forEach((example) => {
+    const chip = document.createElement("span");
+    chip.className = "tableMaterialChip";
+    chip.textContent = example;
+    els.tableGroupImages.append(chip);
+  });
+}
+
+function handleQuadrantClick(quadrantId) {
+  if (appMode !== "table" || tableState.locked || tableState.stage === "count" || tableState.stage === "done") {
+    return;
+  }
+
+  const expectedId = tableState.stage === "quadrants"
+    ? tableState.currentQuadrant?.id
+    : tableState.currentGroup?.quadrantId;
+
+  if (!expectedId) return;
+
+  tableState.locked = true;
+  tableState.answered += 1;
+
+  const isCorrect = quadrantId === expectedId;
+  const expected = tableQuadrants.find((item) => item.id === expectedId);
+  markQuadrants(quadrantId, expectedId);
+  revealQuadrantLabel(expectedId);
+  if (quadrantId !== expectedId) {
+    revealQuadrantLabel(quadrantId);
+  }
+
+  if (isCorrect) {
+    tableState.score += 1;
+    setTableFeedback("ok", "Correto. Esse é o quadrante certo.");
+  } else {
+    setTableFeedback("error", `Resposta incorreta. Gabarito: ${expected.nome}, no quadrante ${expected.posicao}.`);
+  }
+
+  els.nextTableQuestionBtn.hidden = false;
+  updateTableChrome();
+}
+
+function clearQuadrantMarks() {
+  els.surgicalTable.querySelectorAll(".quadrantCell").forEach((cell) => {
+    cell.classList.remove("correct", "wrong", "expected");
+  });
+}
+
+function markQuadrants(clickedId, expectedId) {
+  els.surgicalTable.querySelectorAll(".quadrantCell").forEach((cell) => {
+    if (cell.dataset.quadrant === clickedId && clickedId === expectedId) {
+      cell.classList.add("correct");
+      return;
+    }
+
+    if (cell.dataset.quadrant === clickedId) {
+      cell.classList.add("wrong");
+    }
+
+    if (cell.dataset.quadrant === expectedId) {
+      cell.classList.add("expected");
+    }
+  });
+}
+
+function nextTableQuestion() {
+  els.nextTableQuestionBtn.hidden = true;
+
+  if (tableState.stage === "quadrants") {
+    nextQuadrantQuestion();
+    return;
+  }
+
+  if (tableState.stage === "groups") {
+    nextGroupQuestion();
+    return;
+  }
+
+  renderTableStage();
+}
+
+function renderTableFinish() {
+  tableState.stage = "done";
+  clearQuadrantMarks();
+  const percentage = tableState.answered
+    ? Math.round((tableState.score / tableState.answered) * 100)
+    : 0;
+  const isPerfect = tableState.answered > 0 && tableState.score === tableState.answered;
+
+  els.tableStageLabel.textContent = "Final";
+  els.tableQuestionTitle.textContent = "Mesa montada";
+  els.tableQuestionText.textContent = `Você acertou ${tableState.score} de ${tableState.answered} perguntas (${percentage}%).`;
+  els.quadrantCountForm.hidden = true;
+  els.tableGroupPrompt.hidden = true;
+  els.nextTableQuestionBtn.hidden = true;
+  els.tableBoardPanel.hidden = false;
+
+  if (isPerfect) {
+    els.tableFeedback.className = "tableFeedback ok perfectTableFeedback";
+    els.tableFeedback.innerHTML = `${renderCelebrationBurst()}<span>Gabaritou a montagem da mesa cirúrgica.</span>`;
+  } else {
+    setTableFeedback("ok", "Treino finalizado. Revise os quadrantes que errou e tente de novo.");
+  }
+
+  updateTableChrome();
+}
+
+function itemById(id) {
+  return sutureState.items.find((item) => item.id === id);
+}
+
+function currentSuture() {
+  return sutureState.items[sutureState.index];
+}
+
+function currentComparison() {
+  const pair = sutureState.comparisons[sutureState.comparisonIndex];
+  if (!pair) return [];
+  return pair.map(itemById).filter(Boolean);
+}
+
+function sutureScoreKey() {
+  if (sutureState.mode === "compare") {
+    const pair = sutureState.comparisons[sutureState.comparisonIndex] || [];
+    return `compare:${pair.join(":")}`;
+  }
+
+  const item = currentSuture();
+  if (!item) return "";
+  if (sutureState.mode === "question") {
+    return `question:${item.id}:${sutureState.currentQuestion}`;
+  }
+
+  return `oral:${item.id}`;
+}
+
+function updateSutureChrome() {
+  const total = sutureState.mode === "compare"
+    ? sutureState.comparisons.length
+    : sutureState.items.length;
+  const current = sutureState.mode === "compare"
+    ? sutureState.comparisonIndex + 1
+    : sutureState.index + 1;
+  const scored = sutureState.scores.size;
+  const scoreValues = [...sutureState.scores.values()];
+  const average = scoreValues.length
+    ? (scoreValues.reduce((sum, value) => sum + value, 0) / scoreValues.length).toFixed(1)
+    : "0.0";
+
+  els.progressText.textContent = total
+    ? `Suturas - ${current} de ${total}`
+    : "Nenhuma sutura encontrada.";
+  els.scoreText.textContent = `${scored} avaliadas | média ${average}/3`;
+}
+
+function setAppMode(nextMode) {
+  appMode = nextMode;
+  const isSuture = appMode === "sutures";
+  const isTable = appMode === "table";
+
+  els.instrumentWorkspace.hidden = isSuture || isTable;
+  els.studySection.hidden = isSuture || isTable;
+  els.sutureWorkspace.hidden = !isSuture;
+  els.sutureStudySection.hidden = !isSuture;
+  els.tableWorkspace.hidden = !isTable;
+  els.instrumentModeBtn.classList.toggle("active", !isSuture && !isTable);
+  els.sutureModeBtn.classList.toggle("active", isSuture);
+  els.tableModeBtn.classList.toggle("active", isTable);
+  els.studyBtn.hidden = isTable;
+  els.studyBtn.textContent = isSuture ? "Tabela de suturas" : "Tabela de estudo";
+
+  if (isSuture) {
+    renderSutureItem();
+    return;
+  }
+
+  if (isTable) {
+    resetTableQuiz();
+    return;
+  }
+
+  els.studyBtn.hidden = false;
+  renderItem();
+}
+
+function appendTextBlock(parent, title, text) {
+  const row = document.createElement("div");
+  row.className = "answerLine";
+
+  const strong = document.createElement("strong");
+  strong.textContent = title;
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = text;
+
+  row.append(strong, paragraph);
+  parent.append(row);
+}
+
+function appendBulletList(parent, title, items) {
+  const row = document.createElement("div");
+  row.className = "answerLine";
+
+  const strong = document.createElement("strong");
+  strong.textContent = title;
+
+  const list = document.createElement("ul");
+  items.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.append(li);
+  });
+
+  row.append(strong, list);
+  parent.append(row);
+}
+
+function renderSutureAnswerCard(item, parent) {
+  const card = document.createElement("article");
+  card.className = "sutureAnswerCard";
+
+  const heading = document.createElement("h3");
+  heading.textContent = item.nome;
+  card.append(heading);
+
+  appendTextBlock(card, "Categoria", item.grupo);
+  appendTextBlock(card, "Tipo", item.tipo);
+  appendTextBlock(card, "Como começa", item.comeca);
+  appendTextBlock(card, "Trajeto da agulha", item.trajeto);
+  appendTextBlock(card, "Como termina", item.termina);
+  appendTextBlock(card, "Para que serve", item.servePara);
+  appendBulletList(card, "Pontos que o professor pode cobrar", item.pontosChave);
+  appendBulletList(card, "Erros comuns", item.errosComuns);
+
+  parent.append(card);
+}
+
+function renderSutureStudyTable() {
+  if (!els.sutureStudyTable) return;
+  els.sutureStudyTable.innerHTML = "";
+
+  const groups = new Map();
+  sutureState.items.forEach((item) => {
+    if (!groups.has(item.grupo)) {
+      groups.set(item.grupo, []);
+    }
+    groups.get(item.grupo).push(item);
+  });
+
+  groups.forEach((items, groupName) => {
+    const section = document.createElement("section");
+    section.className = "sutureStudyGroup";
+
+    const heading = document.createElement("h3");
+    heading.textContent = groupName;
+    section.append(heading);
+
+    items.forEach((item) => {
+      const details = document.createElement("details");
+      details.className = "sutureStudyItem";
+
+      const summary = document.createElement("summary");
+      summary.textContent = item.nome;
+      details.append(summary);
+
+      appendTextBlock(details, "Tipo", item.tipo);
+      appendTextBlock(details, "Trajeto", item.trajeto);
+      appendTextBlock(details, "Serve para", item.servePara);
+      appendBulletList(details, "Cobrar de si mesmo", item.pontosChave);
+
+      section.append(details);
+    });
+
+    els.sutureStudyTable.append(section);
+  });
+}
+
+function clearSutureAnswer() {
+  els.sutureAnswer.value = "";
+  els.sutureAnswerBox.hidden = true;
+  els.sutureAnswerContent.innerHTML = "";
+  els.sutureRubric.hidden = true;
+  els.rubricButtons.querySelectorAll("button").forEach((button) => {
+    button.classList.remove("active");
+  });
+}
+
+function renderSutureItem() {
+  clearSutureAnswer();
+  updateSutureChrome();
+
+  if (!sutureState.items.length) {
+    els.sutureMeta.textContent = "";
+    els.sutureTitle.textContent = "Nenhuma sutura cadastrada";
+    els.suturePrompt.textContent = "Confira o arquivo suturas-data.js.";
+    return;
+  }
+
+  if (sutureState.mode === "compare") {
+    const items = currentComparison();
+    els.sutureMeta.textContent = "Comparação de prova";
+    els.sutureTitle.textContent = items.map((item) => item.nome).join(" vs ");
+    els.suturePrompt.textContent = "Explique as diferencas: categoria, trajeto, camadas envolvidas, finalidade e como nao confundir uma com a outra.";
+    els.sutureAnswer.focus();
+    return;
+  }
+
+  const item = currentSuture();
+  els.sutureMeta.textContent = `${item.grupo} - ${item.tipo}`;
+  els.sutureTitle.textContent = item.nome;
+
+  if (sutureState.mode === "question") {
+    const questions = item.perguntas.length ? item.perguntas : [`Explique ${item.nome} como na prova.`];
+    sutureState.currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+    els.suturePrompt.textContent = sutureState.currentQuestion;
+  } else {
+    sutureState.currentQuestion = "";
+    els.suturePrompt.textContent = "Explique como se estivesse diante do EVA: por onde começa, trajeto da agulha, como termina, para que serve e quais cuidados você precisa citar.";
+  }
+
+  els.sutureAnswer.focus();
+}
+
+function showSutureAnswer() {
+  els.sutureAnswerContent.innerHTML = "";
+
+  if (sutureState.mode === "compare") {
+    currentComparison().forEach((item) => renderSutureAnswerCard(item, els.sutureAnswerContent));
+  } else {
+    const item = currentSuture();
+    if (item) renderSutureAnswerCard(item, els.sutureAnswerContent);
+  }
+
+  els.sutureAnswerBox.hidden = false;
+  els.sutureRubric.hidden = false;
+
+  const key = sutureScoreKey();
+  const savedScore = sutureState.scores.get(key);
+  els.rubricButtons.querySelectorAll("button").forEach((button) => {
+    button.classList.toggle("active", Number(button.dataset.score) === savedScore);
+  });
+}
+
+function nextSuture() {
+  if (sutureState.mode === "compare") {
+    sutureState.comparisonIndex = (sutureState.comparisonIndex + 1) % sutureState.comparisons.length;
+  } else {
+    sutureState.index = (sutureState.index + 1) % sutureState.items.length;
+  }
+
+  renderSutureItem();
+}
+
+function setSutureMode(mode) {
+  sutureState.mode = mode;
+  sutureState.index = 0;
+  sutureState.comparisonIndex = 0;
+
+  els.sutureModeButtons.querySelectorAll("button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.mode === mode);
+  });
+
+  renderSutureItem();
+}
+
+function setSutureScore(score) {
+  const key = sutureScoreKey();
+  if (!key) return;
+
+  sutureState.scores.set(key, score);
+  els.rubricButtons.querySelectorAll("button").forEach((button) => {
+    button.classList.toggle("active", Number(button.dataset.score) === score);
+  });
+  updateSutureChrome();
+}
+
+function shuffleSutures() {
+  if (sutureState.mode === "compare") {
+    for (let i = sutureState.comparisons.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [sutureState.comparisons[i], sutureState.comparisons[j]] = [sutureState.comparisons[j], sutureState.comparisons[i]];
+    }
+    sutureState.comparisonIndex = 0;
+  } else {
+    for (let i = sutureState.items.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [sutureState.items[i], sutureState.items[j]] = [sutureState.items[j], sutureState.items[i]];
+    }
+    sutureState.index = 0;
+  }
+
+  renderSutureItem();
+}
+
 els.answerForm.addEventListener("submit", checkAnswer);
 els.nextBtn.addEventListener("click", nextItem);
 els.addCorrectBtn.addEventListener("click", () => adjustCurrentScore(1));
 els.removeCorrectBtn.addEventListener("click", () => adjustCurrentScore(-1));
 els.showAnswerBtn.addEventListener("click", showAnswer);
-els.shuffleBtn.addEventListener("click", shuffleItems);
-els.studyBtn.addEventListener("click", () => {
-  els.studySection.scrollIntoView({ behavior: "smooth", block: "start" });
+els.instrumentModeBtn.addEventListener("click", () => setAppMode("instrument"));
+els.sutureModeBtn.addEventListener("click", () => setAppMode("sutures"));
+els.tableModeBtn.addEventListener("click", () => setAppMode("table"));
+els.shuffleBtn.addEventListener("click", () => {
+  if (appMode === "sutures") {
+    shuffleSutures();
+    return;
+  }
+
+  if (appMode === "table") {
+    resetTableQuiz();
+    return;
+  }
+
+  shuffleItems();
 });
+els.studyBtn.addEventListener("click", () => {
+  const section = appMode === "sutures" ? els.sutureStudySection : els.studySection;
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+els.showSutureAnswerBtn.addEventListener("click", showSutureAnswer);
+els.nextSutureBtn.addEventListener("click", nextSuture);
+els.sutureModeButtons.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-mode]");
+  if (!button) return;
+  setSutureMode(button.dataset.mode);
+});
+els.rubricButtons.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-score]");
+  if (!button) return;
+  setSutureScore(Number(button.dataset.score));
+});
+els.quadrantCountForm.addEventListener("submit", checkQuadrantCount);
+els.nextTableQuestionBtn.addEventListener("click", nextTableQuestion);
+els.restartTableBtn.addEventListener("click", resetTableQuiz);
 
 shuffleItemsSilently();
 renderItem();
 renderStudyTable();
+renderSutureStudyTable();
