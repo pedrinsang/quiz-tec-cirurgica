@@ -77,9 +77,9 @@ const tableGroupRules = [
   },
   {
     id: "pincas-preensao",
-    nome: "Pinças de preensão",
+    nome: "Pinças auxiliares",
     quadrantId: "auxiliar",
-    examples: ["Pinça de dissecção", "Allis", "Adson"],
+    examples: ["Allis", "Dissecção com dente", "Dissecção sem dente", "Adson"],
     match: (text) => text.includes("disseccao") || text.includes("tecidual"),
   },
   {
@@ -92,7 +92,7 @@ const tableGroupRules = [
   {
     id: "afastadores",
     nome: "Afastadores",
-    quadrantId: "auxiliar",
+    quadrantId: "especial",
     examples: ["Farabeuf", "Langenbeck", "Balfour", "Finochietto", "Gelpi", "Weitlanner"],
     match: (text) => text.includes("afastador"),
   },
@@ -119,15 +119,107 @@ const tableGroupRules = [
   },
 ];
 
+const tableAdditionalMaterials = [
+  { id: "laminas-bisturi", resposta: "Lâminas de bisturi", quadrantId: "dierese", grupo: "Diérese" },
+  { id: "fios-sutura", resposta: "Fios de sutura", quadrantId: "sintese", grupo: "Síntese" },
+  { id: "agulhas-cirurgicas", resposta: "Agulhas cirúrgicas traumáticas e não traumáticas", quadrantId: "sintese", grupo: "Síntese" },
+  { id: "pinca-cushing-sem-dente", resposta: "Pinça de dissecção de Cushing sem dente", quadrantId: "auxiliar", grupo: "Auxiliares" },
+  { id: "pinca-cushing-com-dente", resposta: "Pinça de dissecção de Cushing com dente", quadrantId: "auxiliar", grupo: "Auxiliares" },
+  { id: "afastador-gosset", resposta: "Afastador autoestático de Gosset", quadrantId: "especial", grupo: "Especiais" },
+  { id: "cubas", resposta: "Cubas (cuba rim e cuba redonda)", quadrantId: "campos", grupo: "Outros instrumentais e acessórios" },
+  { id: "panos-campo", resposta: "Panos de campo", quadrantId: "campos", grupo: "Outros instrumentais e acessórios" },
+  { id: "compressa-cirurgica", resposta: "Compressa cirúrgica", quadrantId: "campos", grupo: "Outros instrumentais e acessórios" },
+  { id: "gaze", resposta: "Gaze", quadrantId: "campos", grupo: "Outros instrumentais e acessórios" },
+];
+
+const tableTheoryQuestions = [
+  {
+    id: "pontas-instrumentador",
+    pergunta: "Na mesa de instrumental, para qual lado as pontas dos instrumentais devem ficar voltadas?",
+    options: ["Para o instrumentador", "Para o paciente", "Para a direita da mesa"],
+    answer: 0,
+    explanation: "Todos os instrumentais devem ficar com as pontas voltadas para o instrumentador.",
+  },
+  {
+    id: "curvos-para-baixo",
+    pergunta: "Em tesouras e pinças com ramos ou lâminas curvas, as pontas devem ficar orientadas para qual lado?",
+    options: ["Para baixo", "Para cima", "Indiferente, desde que fique no quadrante certo"],
+    answer: 0,
+    explanation: "Instrumentais com lâminas ou ramos curvos devem ficar com as pontas voltadas para baixo.",
+  },
+  {
+    id: "limites-da-mesa",
+    pergunta: "Durante a montagem, o que fazer com pontas ou cabos que ficam ultrapassando a borda da mesa?",
+    options: ["Reposicionar dentro dos limites da mesa", "Deixar para fora se economizar espaço", "Colocar sobre outro instrumental"],
+    answer: 0,
+    explanation: "Os instrumentais devem permanecer posicionados dentro dos limites da mesa de instrumental.",
+  },
+  {
+    id: "duvida-esterilidade",
+    pergunta: "Em caso de dúvida se um utensílio está esterilizado ou não, qual conduta deve ser adotada?",
+    options: ["Considerar não esterilizado", "Considerar esterilizado se estiver seco", "Usar apenas se estiver dentro da bandeja"],
+    answer: 0,
+    explanation: "Todos os utensílios devem ser considerados esterilizados ou não; em caso de dúvida, considere não esterilizado.",
+  },
+  {
+    id: "lamina-porta-agulha",
+    pergunta: "Como a lâmina de bisturi deve ser pega e acoplada ao cabo?",
+    options: ["Com auxílio de um porta-agulha", "Com a mão, para ter mais controle", "Com pinça de dissecção"],
+    answer: 0,
+    explanation: "A lâmina deve ser pega e acoplada ao cabo com auxílio de um porta-agulha, sem usar as mãos nem pinças de dissecção.",
+  },
+  {
+    id: "compressas-gazes-retorno",
+    pergunta: "Compressas e gazes entregues ao cirurgião ou auxiliar podem retornar à mesa após o uso?",
+    options: ["Não; devem ser descartadas", "Sim, se voltarem limpas", "Sim, mas no quadrante de campos"],
+    answer: 0,
+    explanation: "Compressas e gazes entregues ao cirurgião ou auxiliar nunca devem retornar à mesa após o uso; devem ser descartadas.",
+  },
+  {
+    id: "instrumental-sujo",
+    pergunta: "Se um instrumental volta para a mesa sujo de sangue, qual deve ser a conduta antes de reposicioná-lo?",
+    options: ["Limpar com gaze embebida em solução salina estéril", "Guardar diretamente no quadrante correto", "Passar álcool 70% sobre a mesa"],
+    answer: 0,
+    explanation: "Antes de reposicionar, o instrumental sujo deve ser limpo com gaze embebida em solução salina estéril.",
+  },
+  {
+    id: "contaminado-isolado",
+    pergunta: "Instrumentais que tocaram mucosa ou estruturas contaminadas podem voltar para a mesa?",
+    options: ["Podem voltar, mas isolados dos demais", "Podem voltar junto dos estéreis se estiverem secos", "Nunca podem voltar para a mesa sob nenhuma condição"],
+    answer: 0,
+    explanation: "Eles podem retornar, mas devem ficar isolados e separados dos demais materiais estéreis.",
+  },
+  {
+    id: "volante-apresenta-material",
+    pergunta: "Como o volante deve apresentar materiais ao instrumentador?",
+    options: ["Ao lado da mesa e no mesmo nível", "Sobre a mesa de instrumental", "Por cima do campo estéril"],
+    answer: 0,
+    explanation: "O material deve ser apresentado ao lado da mesa e no mesmo nível, sem passar por cima da mesa.",
+  },
+];
+
 const tableState = {
+  mode: "practice",
+  filter: "all",
   stage: "count",
   quadrantQueue: [],
+  theoryQueue: [],
   groupQueue: [],
+  itemQueue: [],
+  retryQueue: [],
   currentQuadrant: null,
+  currentTheory: null,
   currentGroup: null,
+  currentTableItem: null,
+  selectedStudyQuadrant: null,
+  placed: {},
+  mistakes: [],
+  timerStartedAt: null,
+  elapsedMs: 0,
+  timerInterval: null,
   score: 0,
   answered: 0,
-  total: tableQuadrants.length + tableGroupRules.length,
+  total: 0,
   locked: false,
   revealed: false,
 };
@@ -186,16 +278,62 @@ const els = {
   quadrantCountForm: document.querySelector("#quadrantCountForm"),
   quadrantCountInput: document.querySelector("#quadrantCountInput"),
   tableFeedback: document.querySelector("#tableFeedback"),
+  tableTheoryOptions: document.querySelector("#tableTheoryOptions"),
+  tablePracticeModeBtn: document.querySelector("#tablePracticeModeBtn"),
+  tableExamModeBtn: document.querySelector("#tableExamModeBtn"),
+  tableStudyModeBtn: document.querySelector("#tableStudyModeBtn"),
+  tableFilterSelect: document.querySelector("#tableFilterSelect"),
   tableGroupPrompt: document.querySelector("#tableGroupPrompt"),
   tableGroupTitle: document.querySelector("#tableGroupTitle"),
   tableGroupHint: document.querySelector("#tableGroupHint"),
   tableGroupImages: document.querySelector("#tableGroupImages"),
   tableBoardPanel: document.querySelector("#tableBoardPanel"),
   nextTableQuestionBtn: document.querySelector("#nextTableQuestionBtn"),
+  retryTableMistakesBtn: document.querySelector("#retryTableMistakesBtn"),
   restartTableBtn: document.querySelector("#restartTableBtn"),
   surgicalTable: document.querySelector("#surgicalTable"),
   tableScoreText: document.querySelector("#tableScoreText"),
+  tableTimerText: document.querySelector("#tableTimerText"),
+  tableImageLightbox: document.querySelector("#tableImageLightbox"),
+  tableImageLightboxImg: document.querySelector("#tableImageLightboxImg"),
+  tableImageLightboxClose: document.querySelector("#tableImageLightboxClose"),
 };
+
+function updateSlidingSwitch(container) {
+  if (!container) return;
+  const buttons = [...container.children].filter((child) => child.tagName === "BUTTON");
+  const activeIndex = buttons.findIndex((button) => button.classList.contains("active"));
+
+  let indicator = [...container.children].find((child) => child.classList.contains("slidingSwitchIndicator"));
+  if (!indicator) {
+    indicator = document.createElement("span");
+    indicator.className = "slidingSwitchIndicator";
+    indicator.setAttribute("aria-hidden", "true");
+    container.prepend(indicator);
+  }
+
+  container.style.setProperty("--tab-count", String(buttons.length || 1));
+  container.style.setProperty("--active-index", String(Math.max(activeIndex, 0)));
+  const styles = window.getComputedStyle(container);
+  const paddingLeft = Number.parseFloat(styles.paddingLeft) || 0;
+  const paddingTop = Number.parseFloat(styles.paddingTop) || 0;
+  const indicatorWidth = activeIndex >= 0 ? buttons[activeIndex].offsetWidth : buttons[0].offsetWidth;
+  const indicatorHeight = activeIndex >= 0 ? buttons[activeIndex].offsetHeight : buttons[0].offsetHeight;
+  const indicatorX = activeIndex >= 0 ? buttons[activeIndex].offsetLeft - paddingLeft : 0;
+  const indicatorY = activeIndex >= 0 ? buttons[activeIndex].offsetTop - paddingTop : 0;
+
+  container.style.setProperty("--switch-indicator-width", `${Math.max(indicatorWidth, 0)}px`);
+  container.style.setProperty("--switch-indicator-height", `${Math.max(indicatorHeight, 0)}px`);
+  container.style.setProperty("--switch-indicator-x", `${Math.max(indicatorX, 0)}px`);
+  container.style.setProperty("--switch-indicator-y", `${Math.max(indicatorY, 0)}px`);
+  indicator.removeAttribute("style");
+}
+
+function updateAllSlidingSwitches() {
+  updateSlidingSwitch(els.instrumentModeBtn.parentElement);
+  updateSlidingSwitch(els.sutureModeButtons);
+  updateSlidingSwitch(els.tablePracticeModeBtn?.parentElement);
+}
 
 function stripAccents(value) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -714,11 +852,150 @@ function shuffleCopy(items) {
   return copy;
 }
 
-function tableGroupItems(group) {
-  return state.items.filter((item) => {
-    const text = `${normalizeAnswer(item.resposta)} ${normalizeAnswer(item.nome_arquivo || "")}`;
-    return group.match(text);
+function tableRuleForItem(item) {
+  const text = `${normalizeAnswer(item.resposta)} ${normalizeAnswer(item.nome_arquivo || "")}`;
+  return tableGroupRules.find((group) => group.match(text));
+}
+
+function tableFilterOptions() {
+  return [
+    { id: "all", nome: "Todos" },
+    ...tableQuadrants.map((quadrant) => ({ id: quadrant.id, nome: quadrant.nome })),
+  ];
+}
+
+function tableItems() {
+  const quizItems = state.items
+    .map((item) => {
+      const group = tableRuleForItem(item);
+      if (!group) return null;
+
+      return {
+        id: item.id,
+        resposta: item.resposta,
+        imagens: item.imagens,
+        quadrantId: group.quadrantId,
+        grupo: group.nome,
+        groupId: group.id,
+      };
+    })
+    .filter(Boolean);
+
+  const extraItems = tableAdditionalMaterials.map((item) => ({
+    ...item,
+    groupId: item.groupId || `extra-${item.quadrantId}`,
+  }));
+
+  return [...quizItems, ...extraItems];
+}
+
+function filteredTableItems() {
+  const items = tableState.retryQueue.length ? tableState.retryQueue : tableItems();
+  if (tableState.filter === "all") return items;
+  return items.filter((item) => item.quadrantId === tableState.filter);
+}
+
+function filteredTableGroups() {
+  if (tableState.retryQueue.length) return [];
+  if (tableState.filter === "all") return tableGroupRules;
+  return tableGroupRules.filter((group) => group.quadrantId === tableState.filter);
+}
+
+function filteredTableTheoryQuestions() {
+  if (tableState.retryQueue.length) return [];
+  return tableState.filter === "all" ? tableTheoryQuestions : [];
+}
+
+function emptyPlacedTable() {
+  return Object.fromEntries(tableQuadrants.map((quadrant) => [quadrant.id, []]));
+}
+
+function tableStageTotal() {
+  if (tableState.mode === "study") return 0;
+  const countQuestion = tableState.filter === "all" && !tableState.retryQueue.length ? 1 : 0;
+  const quadrantQuestions = tableState.filter === "all" && !tableState.retryQueue.length
+    ? tableQuadrants.length
+    : 0;
+  return countQuestion + quadrantQuestions + tableState.theoryQueue.length + tableState.groupQueue.length + tableState.itemQueue.length;
+}
+
+function populateTableFilters() {
+  if (!els.tableFilterSelect) return;
+  els.tableFilterSelect.innerHTML = "";
+  tableFilterOptions().forEach((option) => {
+    const opt = document.createElement("option");
+    opt.value = option.id;
+    opt.textContent = option.nome;
+    els.tableFilterSelect.append(opt);
   });
+  els.tableFilterSelect.value = tableState.filter;
+}
+
+function setTableMode(mode) {
+  tableState.mode = mode;
+  tableState.retryQueue = [];
+  resetTableQuiz();
+}
+
+function restartTableSession() {
+  tableState.retryQueue = [];
+  resetTableQuiz();
+}
+
+function updateTableModeButtons() {
+  els.tablePracticeModeBtn?.classList.toggle("active", tableState.mode === "practice");
+  els.tableExamModeBtn?.classList.toggle("active", tableState.mode === "exam");
+  els.tableStudyModeBtn?.classList.toggle("active", tableState.mode === "study");
+  updateSlidingSwitch(els.tablePracticeModeBtn?.parentElement);
+}
+
+function tableTextOnlyItems() {
+  return tableItems().filter((item) => !item.imagens?.length);
+}
+
+function formatTimer(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function updateTableTimer() {
+  if (!els.tableTimerText) return;
+  const elapsed = tableState.timerStartedAt
+    ? Date.now() - tableState.timerStartedAt
+    : tableState.elapsedMs;
+  els.tableTimerText.textContent = formatTimer(elapsed);
+}
+
+function startTableTimer() {
+  if (tableState.mode === "study" || tableState.timerStartedAt) return;
+  tableState.timerStartedAt = Date.now();
+  tableState.elapsedMs = 0;
+  els.tableTimerText.hidden = false;
+  updateTableTimer();
+  tableState.timerInterval = window.setInterval(updateTableTimer, 1000);
+}
+
+function stopTableTimer() {
+  if (tableState.timerStartedAt) {
+    tableState.elapsedMs = Date.now() - tableState.timerStartedAt;
+  }
+  tableState.timerStartedAt = null;
+  if (tableState.timerInterval) {
+    window.clearInterval(tableState.timerInterval);
+    tableState.timerInterval = null;
+  }
+  updateTableTimer();
+}
+
+function resetTableTimer() {
+  stopTableTimer();
+  tableState.elapsedMs = 0;
+  if (els.tableTimerText) {
+    els.tableTimerText.textContent = "00:00";
+    els.tableTimerText.hidden = true;
+  }
 }
 
 function updateTableChrome() {
@@ -728,38 +1005,105 @@ function updateTableChrome() {
 
   els.progressText.textContent = "Montagem da mesa cirúrgica";
   els.scoreText.textContent = `${tableState.score} / ${tableState.answered} (${percentage}%)`;
-  els.tableScoreText.textContent = `${tableState.score} / ${tableState.answered} - ${percentage}%`;
+  els.tableScoreText.textContent = tableState.mode === "study"
+    ? `${filteredTableItems().length} materiais`
+    : `${tableState.score} / ${tableState.answered} - ${percentage}%`;
 }
 
 function resetTableQuiz() {
-  tableState.stage = "count";
-  tableState.quadrantQueue = shuffleCopy(tableQuadrants);
-  tableState.groupQueue = shuffleCopy(tableGroupRules);
+  resetTableTimer();
+  tableState.placed = emptyPlacedTable();
+  tableState.mistakes = [];
+  tableState.theoryQueue = shuffleCopy(filteredTableTheoryQuestions());
+  tableState.groupQueue = shuffleCopy(filteredTableGroups());
+  tableState.itemQueue = shuffleCopy(filteredTableItems());
+  tableState.quadrantQueue = tableState.filter === "all" && !tableState.retryQueue.length
+    ? shuffleCopy(tableQuadrants)
+    : [];
+  tableState.stage = tableState.mode === "study"
+    ? "study"
+    : tableState.quadrantQueue.length
+      ? "count"
+      : tableState.theoryQueue.length
+        ? "theory"
+        : tableState.groupQueue.length
+          ? "groups"
+          : "items";
   tableState.currentQuadrant = null;
+  tableState.currentTheory = null;
   tableState.currentGroup = null;
+  tableState.currentTableItem = null;
+  tableState.selectedStudyQuadrant = null;
   tableState.score = 0;
   tableState.answered = 0;
+  tableState.total = tableStageTotal();
   tableState.locked = false;
   tableState.revealed = false;
 
   els.quadrantCountInput.value = "";
-  els.tableBoardPanel.hidden = true;
+  els.retryTableMistakesBtn.hidden = true;
+  els.tableBoardPanel.hidden = tableState.stage === "count";
   els.surgicalTable.innerHTML = "";
+  updateTableModeButtons();
   renderTableStage();
 }
 
-function renderSurgicalTable(showLabels = false) {
+function renderSurgicalTable(showLabels = false, placed = tableState.placed) {
   els.surgicalTable.innerHTML = "";
+  els.surgicalTable.classList.toggle("showOrientation", true);
+  els.surgicalTable.classList.toggle("studyBoard", tableState.stage === "study");
+
+  const patientLabel = document.createElement("div");
+  patientLabel.className = "tableOrientation tableOrientationPatient";
+  patientLabel.textContent = "Paciente";
+  els.surgicalTable.append(patientLabel);
+
+  const instrumenterLabel = document.createElement("div");
+  instrumenterLabel.className = "tableOrientation tableOrientationInstrumenter";
+  instrumenterLabel.textContent = "Instrumentador";
+  els.surgicalTable.append(instrumenterLabel);
+
+  const leftLabel = document.createElement("div");
+  leftLabel.className = "tableOrientation tableOrientationLeft";
+  leftLabel.textContent = "Esquerda";
+  els.surgicalTable.append(leftLabel);
+
+  const rightLabel = document.createElement("div");
+  rightLabel.className = "tableOrientation tableOrientationRight";
+  rightLabel.textContent = "Direita";
+  els.surgicalTable.append(rightLabel);
+
   tableQuadrants.forEach((quadrant) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "quadrantCell";
     button.dataset.quadrant = quadrant.id;
+    const placedItems = placed?.[quadrant.id] || [];
+    const isStudy = tableState.stage === "study";
+    const isSelected = isStudy && tableState.selectedStudyQuadrant === quadrant.id;
+    button.classList.toggle("studyQuadrant", isStudy);
+    button.classList.toggle("selected", isSelected);
+    if (isStudy) {
+      button.setAttribute("aria-expanded", String(isSelected));
+      button.setAttribute("aria-label", `${quadrant.nome}: ${placedItems.length} materiais. Ver materiais deste quadrante.`);
+    }
     button.innerHTML = `
       <span class="quadrantPosition">${quadrant.posicao}</span>
       <strong>${showLabels ? quadrant.nome : "Quadrante"}</strong>
       <small>${showLabels ? quadrant.descricao : "Aguardando resposta"}</small>
+      <span class="placedCount">${placedItems.length ? `${placedItems.length} ${isStudy ? "materiais" : `colocado${placedItems.length > 1 ? "s" : ""}`}` : ""}</span>
+      ${isStudy ? `<span class="placedTapHint">${isSelected ? "Selecionado" : "Ver materiais"}</span>` : ""}
+      <span class="placedItems"></span>
     `;
+    const placedList = button.querySelector(".placedItems");
+    const visibleItems = isStudy ? [] : placedItems.slice(-8);
+    visibleItems.forEach((item) => {
+      const chip = document.createElement("span");
+      chip.className = "placedItemChip";
+      chip.textContent = item.resposta;
+      chip.title = item.resposta;
+      placedList.append(chip);
+    });
     button.addEventListener("click", () => handleQuadrantClick(quadrant.id));
     els.surgicalTable.append(button);
   });
@@ -777,17 +1121,32 @@ function revealQuadrantLabel(quadrantId) {
 }
 
 function setTableFeedback(type, message) {
+  els.tableFeedback.hidden = false;
   els.tableFeedback.className = `tableFeedback ${type}`;
   els.tableFeedback.textContent = message;
+}
+
+function clearTableFeedback() {
+  els.tableFeedback.hidden = true;
+  els.tableFeedback.className = "tableFeedback";
+  els.tableFeedback.textContent = "";
 }
 
 function renderTableStage() {
   updateTableChrome();
   els.nextTableQuestionBtn.hidden = true;
+  els.retryTableMistakesBtn.hidden = true;
   els.tableGroupPrompt.hidden = true;
   els.tableGroupImages.innerHTML = "";
-  els.tableFeedback.className = "tableFeedback";
-  els.tableFeedback.textContent = "";
+  els.tableGroupImages.className = "tableGroupImages";
+  els.tableTheoryOptions.hidden = true;
+  els.tableTheoryOptions.innerHTML = "";
+  clearTableFeedback();
+
+  if (tableState.stage === "study") {
+    renderTableStudy();
+    return;
+  }
 
   if (tableState.stage === "count") {
     els.tableStageLabel.textContent = "Etapa 1";
@@ -806,8 +1165,18 @@ function renderTableStage() {
     return;
   }
 
+  if (tableState.stage === "theory") {
+    nextTableTheoryQuestion();
+    return;
+  }
+
   if (tableState.stage === "groups") {
-    nextGroupQuestion();
+    nextTableGroupQuestion();
+    return;
+  }
+
+  if (tableState.stage === "items") {
+    nextTableItemQuestion();
     return;
   }
 
@@ -846,12 +1215,16 @@ function checkQuadrantCount(event) {
 function nextQuadrantQuestion() {
   tableState.locked = false;
   els.quadrantCountForm.hidden = true;
-  renderSurgicalTable(false);
+  renderSurgicalTable(tableState.mode === "practice");
 
   const next = tableState.quadrantQueue.shift();
   if (!next) {
-    tableState.stage = "groups";
-    nextGroupQuestion();
+    tableState.stage = tableState.theoryQueue.length
+      ? "theory"
+      : tableState.groupQueue.length
+        ? "groups"
+        : "items";
+    renderTableStage();
     return;
   }
 
@@ -861,60 +1234,286 @@ function nextQuadrantQuestion() {
   els.tableQuestionText.textContent = `Clique no quadrante: ${next.nome}.`;
 }
 
-function nextGroupQuestion() {
+function nextTableTheoryQuestion() {
   tableState.locked = false;
-  renderSurgicalTable(false);
+  renderSurgicalTable(tableState.mode === "practice");
+
+  const next = tableState.theoryQueue.shift();
+  if (!next) {
+    tableState.stage = tableState.groupQueue.length ? "groups" : "items";
+    renderTableStage();
+    return;
+  }
+
+  tableState.currentTheory = next;
+  els.tableStageLabel.textContent = tableTheoryQuestions.length ? "Etapa 4" : "Etapa 3";
+  els.tableQuestionTitle.textContent = "Cuidados na montagem";
+  els.tableQuestionText.textContent = next.pergunta;
+  renderTableTheoryOptions(next);
+}
+
+function renderTableTheoryOptions(question) {
+  els.tableTheoryOptions.hidden = false;
+  els.tableTheoryOptions.innerHTML = "";
+  question.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "tableTheoryOption";
+    button.textContent = option;
+    button.addEventListener("click", () => answerTableTheory(index));
+    els.tableTheoryOptions.append(button);
+  });
+}
+
+function answerTableTheory(selectedIndex) {
+  if (tableState.locked || !tableState.currentTheory) return;
+  tableState.locked = true;
+  tableState.answered += 1;
+
+  const isCorrect = selectedIndex === tableState.currentTheory.answer;
+  els.tableTheoryOptions.querySelectorAll("button").forEach((button, index) => {
+    button.disabled = true;
+    if (index === tableState.currentTheory.answer) {
+      button.classList.add("correct");
+    } else if (index === selectedIndex) {
+      button.classList.add("wrong");
+    }
+  });
+
+  if (isCorrect) {
+    tableState.score += 1;
+    setTableFeedback("ok", `Correto. ${tableState.currentTheory.explanation}`);
+  } else {
+    tableState.mistakes.push({
+      stage: "theory",
+      item: tableState.currentTheory,
+      selected: { nome: tableState.currentTheory.options[selectedIndex] },
+      expected: { nome: tableState.currentTheory.options[tableState.currentTheory.answer] },
+    });
+    setTableFeedback("error", `Gabarito: ${tableState.currentTheory.options[tableState.currentTheory.answer]}. ${tableState.currentTheory.explanation}`);
+  }
+
+  els.nextTableQuestionBtn.hidden = false;
+  updateTableChrome();
+}
+
+function nextTableGroupQuestion() {
+  tableState.locked = false;
+  renderSurgicalTable(tableState.mode === "practice");
 
   const next = tableState.groupQueue.shift();
+  if (!next) {
+    tableState.stage = "items";
+    nextTableItemQuestion();
+    return;
+  }
+
+  tableState.currentGroup = next;
+  els.tableStageLabel.textContent = "Etapa 3";
+  els.tableQuestionTitle.textContent = "Posicionamento dos grupos";
+  els.tableQuestionText.textContent = "Clique no quadrante onde este grupo deve ficar.";
+  els.tableGroupPrompt.hidden = false;
+  els.tableGroupTitle.textContent = next.nome;
+  els.tableGroupHint.textContent = "Escolha o quadrante correto.";
+  renderTableGroupExamples(next);
+}
+
+function nextTableItemQuestion() {
+  tableState.locked = false;
+  startTableTimer();
+  renderSurgicalTable(tableState.mode === "practice");
+
+  const next = tableState.itemQueue.shift();
   if (!next) {
     tableState.stage = "done";
     renderTableFinish();
     return;
   }
 
-  tableState.currentGroup = next;
+  tableState.currentTableItem = next;
   const quadrant = tableQuadrants.find((item) => item.id === next.quadrantId);
-  const items = tableGroupItems(next).slice(0, 4);
 
-  els.tableStageLabel.textContent = "Etapa 3";
-  els.tableQuestionTitle.textContent = "Posicionamento dos grupos";
-  els.tableQuestionText.textContent = "Clique no quadrante onde este grupo deve ficar.";
+  els.tableStageLabel.textContent = tableState.retryQueue.length ? "Revisão" : "Etapa 5";
+  els.tableQuestionTitle.textContent = "Posicionamento dos materiais";
+  els.tableQuestionText.textContent = "Clique no quadrante onde este instrumento ou material deve ficar.";
   els.tableGroupPrompt.hidden = false;
-  els.tableGroupTitle.textContent = next.nome;
-  els.tableGroupHint.textContent = "Observe os exemplos e escolha o quadrante correto da mesa.";
-  renderTableGroupImages(items, next.examples || []);
+  els.tableGroupTitle.textContent = next.imagens?.length ? "Identifique o instrumento" : next.resposta;
+  els.tableGroupHint.textContent = next.imagens?.length
+    ? "Clique na foto para ampliar. Depois escolha o quadrante correto."
+    : "Escolha o quadrante correto da mesa.";
+  renderTableGroupImages(next);
 
   if (!quadrant) {
-    setTableFeedback("error", "Este grupo não tem quadrante configurado.");
+    setTableFeedback("error", "Este material não tem quadrante configurado.");
   }
 }
 
-function renderTableGroupImages(items, examples = []) {
+function renderTableGroupExamples(group) {
   els.tableGroupImages.innerHTML = "";
-  items.forEach((item) => {
-    const img = document.createElement("img");
-    img.src = encodeURI(item.imagens[0]);
-    img.alt = item.resposta;
-    img.title = item.resposta;
-    els.tableGroupImages.append(img);
+  els.tableGroupImages.className = "tableGroupImages";
+  const exampleItems = tableItems()
+    .filter((item) => item.groupId === group.id && item.imagens?.length)
+    .slice(0, 12);
+
+  exampleItems.forEach((item) => {
+    appendTableImage(item.imagens[0], item.resposta);
   });
 
-  examples.forEach((example) => {
+  if (!exampleItems.length) {
+    group.examples.forEach((example) => {
+      const chip = document.createElement("span");
+      chip.className = "tableMaterialChip";
+      chip.textContent = example;
+      els.tableGroupImages.append(chip);
+    });
+  }
+}
+
+function renderTableGroupImages(item) {
+  els.tableGroupImages.innerHTML = "";
+  els.tableGroupImages.className = "tableGroupImages";
+  (item.imagens || []).slice(0, 2).forEach((image) => {
+    appendTableImage(image, item.resposta);
+  });
+
+  if (!item.imagens || !item.imagens.length) {
     const chip = document.createElement("span");
     chip.className = "tableMaterialChip";
-    chip.textContent = example;
+    chip.textContent = item.resposta;
     els.tableGroupImages.append(chip);
+  }
+}
+
+function renderTableStudyMaterialList(quadrant, items) {
+  els.tableGroupPrompt.hidden = false;
+  els.tableGroupTitle.textContent = quadrant ? quadrant.nome : "Materiais por quadrante";
+  els.tableGroupHint.textContent = quadrant
+    ? `${items.length} materiais neste quadrante. Toque nas fotos para ampliar.`
+    : "Toque em um quadrante da mesa para visualizar os materiais correspondentes.";
+  els.tableGroupImages.innerHTML = "";
+  els.tableGroupImages.className = "tableGroupImages tableStudyMaterialList";
+
+  if (!quadrant) {
+    const empty = document.createElement("span");
+    empty.className = "tableStudyEmpty";
+    empty.textContent = "Nenhum quadrante selecionado.";
+    els.tableGroupImages.append(empty);
+    return;
+  }
+
+  if (!items.length) {
+    const empty = document.createElement("span");
+    empty.className = "tableStudyEmpty";
+    empty.textContent = "Nao ha materiais neste quadrante com o filtro atual.";
+    els.tableGroupImages.append(empty);
+    return;
+  }
+
+  items.forEach((item) => {
+    const card = document.createElement("article");
+    card.className = "tableStudyMaterialCard";
+
+    const title = document.createElement("strong");
+    title.textContent = item.resposta;
+    card.append(title);
+
+    const meta = document.createElement("span");
+    meta.textContent = item.grupo || quadrant.nome;
+    card.append(meta);
+
+    const images = document.createElement("div");
+    images.className = "tableStudyMaterialImages";
+    (item.imagens || []).slice(0, 2).forEach((image) => {
+      const img = document.createElement("img");
+      img.src = encodeURI(image);
+      img.alt = item.resposta;
+      img.title = "Ampliar imagem";
+      img.tabIndex = 0;
+      img.role = "button";
+      img.addEventListener("click", () => openTableImageLightbox(img.src, item.resposta));
+      img.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openTableImageLightbox(img.src, item.resposta);
+        }
+      });
+      images.append(img);
+    });
+
+    if (!item.imagens?.length) {
+      const chip = document.createElement("span");
+      chip.className = "tableMaterialChip";
+      chip.textContent = "Sem foto";
+      images.append(chip);
+    }
+
+    card.append(images);
+    els.tableGroupImages.append(card);
   });
 }
 
+function showTableStudyQuadrant(quadrantId) {
+  const quadrant = tableQuadrants.find((item) => item.id === quadrantId);
+  if (!quadrant) return;
+
+  tableState.selectedStudyQuadrant = quadrantId;
+  renderSurgicalTable(true, tableState.placed);
+  renderTableStudyMaterialList(quadrant, tableState.placed[quadrantId] || []);
+  setTableFeedback("ok", `${quadrant.nome}: revise os materiais deste quadrante abaixo.`);
+  if (window.matchMedia("(max-width: 700px)").matches) {
+    els.tableGroupPrompt.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+function appendTableImage(src, alt) {
+  els.tableGroupImages.className = "tableGroupImages";
+  const img = document.createElement("img");
+  img.src = encodeURI(src);
+  img.alt = alt;
+  img.title = "Ampliar imagem";
+  img.tabIndex = 0;
+  img.role = "button";
+  img.addEventListener("click", () => openTableImageLightbox(img.src, alt));
+  img.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openTableImageLightbox(img.src, alt);
+    }
+  });
+  els.tableGroupImages.append(img);
+}
+
+function openTableImageLightbox(src, alt) {
+  els.tableImageLightboxImg.src = src;
+  els.tableImageLightboxImg.alt = alt;
+  els.tableImageLightbox.hidden = false;
+}
+
+function closeTableImageLightbox() {
+  els.tableImageLightbox.hidden = true;
+  els.tableImageLightboxImg.removeAttribute("src");
+  els.tableImageLightboxImg.alt = "";
+}
+
 function handleQuadrantClick(quadrantId) {
-  if (appMode !== "table" || tableState.locked || tableState.stage === "count" || tableState.stage === "done") {
+  if (appMode !== "table") {
+    return;
+  }
+
+  if (tableState.stage === "study") {
+    showTableStudyQuadrant(quadrantId);
+    return;
+  }
+
+  if (tableState.locked || tableState.stage === "count" || tableState.stage === "done") {
     return;
   }
 
   const expectedId = tableState.stage === "quadrants"
     ? tableState.currentQuadrant?.id
-    : tableState.currentGroup?.quadrantId;
+    : tableState.stage === "groups"
+      ? tableState.currentGroup?.quadrantId
+      : tableState.currentTableItem?.quadrantId;
 
   if (!expectedId) return;
 
@@ -924,20 +1523,97 @@ function handleQuadrantClick(quadrantId) {
   const isCorrect = quadrantId === expectedId;
   const expected = tableQuadrants.find((item) => item.id === expectedId);
   markQuadrants(quadrantId, expectedId);
-  revealQuadrantLabel(expectedId);
-  if (quadrantId !== expectedId) {
+  if (tableState.mode === "practice" || !isCorrect) {
+    revealQuadrantLabel(expectedId);
+  }
+  if (quadrantId !== expectedId && tableState.mode === "practice") {
     revealQuadrantLabel(quadrantId);
   }
 
   if (isCorrect) {
     tableState.score += 1;
-    setTableFeedback("ok", "Correto. Esse é o quadrante certo.");
+    setTableFeedback("ok", tableCorrectFeedback(expected));
   } else {
-    setTableFeedback("error", `Resposta incorreta. Gabarito: ${expected.nome}, no quadrante ${expected.posicao}.`);
+    const selected = tableQuadrants.find((item) => item.id === quadrantId);
+    tableState.mistakes.push({
+      stage: tableState.stage,
+      item: tableState.currentTableItem || tableState.currentGroup || tableState.currentQuadrant,
+      selected,
+      expected,
+    });
+    setTableFeedback("error", tableErrorFeedback(expected, selected));
+  }
+
+  if (tableState.stage === "items" && tableState.currentTableItem) {
+    placeTableItem(tableState.currentTableItem);
+    refreshPlacedQuadrant(tableState.currentTableItem.quadrantId);
   }
 
   els.nextTableQuestionBtn.hidden = false;
   updateTableChrome();
+}
+
+function tableCorrectFeedback(expected) {
+  if (tableState.stage === "theory" && tableState.currentTheory) {
+    return `Correto. ${tableState.currentTheory.explanation}`;
+  }
+
+  if (tableState.stage === "items" && tableState.currentTableItem) {
+    return `Correto. ${tableState.currentTableItem.resposta} fica em ${expected.nome}, no quadrante ${expected.posicao}.`;
+  }
+
+  if (tableState.stage === "groups" && tableState.currentGroup) {
+    return `Correto. ${tableState.currentGroup.nome} fica em ${expected.nome}, no quadrante ${expected.posicao}.`;
+  }
+
+  return "Correto. Esse é o quadrante certo.";
+}
+
+function tableErrorFeedback(expected, selected) {
+  const selectedText = selected ? ` Você marcou ${selected.nome}.` : "";
+  if (tableState.stage === "theory" && tableState.currentTheory) {
+    return `Gabarito: ${expected.nome}. ${tableState.currentTheory.explanation}`;
+  }
+
+  if (tableState.stage === "items" && tableState.currentTableItem) {
+    return `${tableState.currentTableItem.resposta}: gabarito ${expected.nome}, quadrante ${expected.posicao}.${selectedText}`;
+  }
+
+  if (tableState.stage === "groups" && tableState.currentGroup) {
+    return `${tableState.currentGroup.nome}: gabarito ${expected.nome}, quadrante ${expected.posicao}.${selectedText}`;
+  }
+
+  return `Resposta incorreta. Gabarito: ${expected.nome}, no quadrante ${expected.posicao}.${selectedText}`;
+}
+
+function placeTableItem(item) {
+  if (!item?.quadrantId || !tableState.placed[item.quadrantId]) return;
+  if (tableState.placed[item.quadrantId].some((placed) => placed.id === item.id)) return;
+  tableState.placed[item.quadrantId].push(item);
+}
+
+function refreshPlacedQuadrant(quadrantId) {
+  const cell = els.surgicalTable.querySelector(`[data-quadrant="${quadrantId}"]`);
+  if (!cell) return;
+
+  const placedItems = tableState.placed[quadrantId] || [];
+  const count = cell.querySelector(".placedCount");
+  const list = cell.querySelector(".placedItems");
+  if (count) {
+    count.textContent = placedItems.length
+      ? `${placedItems.length} colocado${placedItems.length > 1 ? "s" : ""}`
+      : "";
+  }
+
+  if (!list) return;
+  list.innerHTML = "";
+  placedItems.slice(-8).forEach((item) => {
+    const chip = document.createElement("span");
+    chip.className = "placedItemChip";
+    chip.textContent = item.resposta;
+    chip.title = item.resposta;
+    list.append(chip);
+  });
 }
 
 function clearQuadrantMarks() {
@@ -965,14 +1641,25 @@ function markQuadrants(clickedId, expectedId) {
 
 function nextTableQuestion() {
   els.nextTableQuestionBtn.hidden = true;
+  clearTableFeedback();
 
   if (tableState.stage === "quadrants") {
     nextQuadrantQuestion();
     return;
   }
 
+  if (tableState.stage === "theory") {
+    nextTableTheoryQuestion();
+    return;
+  }
+
   if (tableState.stage === "groups") {
-    nextGroupQuestion();
+    nextTableGroupQuestion();
+    return;
+  }
+
+  if (tableState.stage === "items") {
+    nextTableItemQuestion();
     return;
   }
 
@@ -981,6 +1668,7 @@ function nextTableQuestion() {
 
 function renderTableFinish() {
   tableState.stage = "done";
+  stopTableTimer();
   clearQuadrantMarks();
   const percentage = tableState.answered
     ? Math.round((tableState.score / tableState.answered) * 100)
@@ -994,15 +1682,71 @@ function renderTableFinish() {
   els.tableGroupPrompt.hidden = true;
   els.nextTableQuestionBtn.hidden = true;
   els.tableBoardPanel.hidden = false;
+  renderSurgicalTable(true);
 
   if (isPerfect) {
     els.tableFeedback.className = "tableFeedback ok perfectTableFeedback";
     els.tableFeedback.innerHTML = `${renderCelebrationBurst()}<span>Gabaritou a montagem da mesa cirúrgica.</span>`;
   } else {
-    setTableFeedback("ok", "Treino finalizado. Revise os quadrantes que errou e tente de novo.");
+    renderTableMistakeSummary();
   }
 
   updateTableChrome();
+}
+
+function renderTableMistakeSummary() {
+  els.tableFeedback.hidden = false;
+  els.tableFeedback.className = "tableFeedback tableMistakeSummary";
+  els.tableFeedback.innerHTML = "";
+  const title = document.createElement("strong");
+  title.textContent = "Erros para revisar";
+  els.tableFeedback.append(title);
+
+  const list = document.createElement("ul");
+  tableState.mistakes.forEach((mistake) => {
+    const row = document.createElement("li");
+    const itemName = mistake.item?.pergunta || mistake.item?.resposta || mistake.item?.nome || "Quadrante";
+    row.textContent = `${itemName}: marcou ${mistake.selected?.nome || "outro quadrante"}; correto ${mistake.expected.nome}.`;
+    list.append(row);
+  });
+  els.tableFeedback.append(list);
+  els.retryTableMistakesBtn.hidden = !tableState.mistakes.some((mistake) => mistake.stage === "items");
+}
+
+function retryTableMistakes() {
+  const retryItems = tableState.mistakes
+    .filter((mistake) => mistake.stage === "items" && mistake.item?.quadrantId)
+    .map((mistake) => mistake.item);
+
+  if (!retryItems.length) return;
+
+  tableState.retryQueue = retryItems;
+  resetTableQuiz();
+}
+
+function renderTableStudy() {
+  const items = filteredTableItems();
+  const placed = emptyPlacedTable();
+  items.forEach((item) => {
+    placed[item.quadrantId]?.push(item);
+  });
+
+  tableState.placed = placed;
+  els.tableStageLabel.textContent = "Estudo";
+  els.tableQuestionTitle.textContent = "Mesa completa";
+  els.tableQuestionText.textContent = `${items.length} materiais no filtro selecionado. Toque em um quadrante para visualizar os materiais.`;
+  els.quadrantCountForm.hidden = true;
+  els.tableBoardPanel.hidden = false;
+  els.nextTableQuestionBtn.hidden = true;
+  els.retryTableMistakesBtn.hidden = true;
+  renderSurgicalTable(true, placed);
+  renderTableStudyMaterialList(null, []);
+  setTableFeedback("ok", "Use a mesa para revisar a posição dos materiais.");
+  updateTableChrome();
+}
+
+function tableMissingPhotoNames() {
+  return tableTextOnlyItems().map((item) => item.resposta);
 }
 
 function itemById(id) {
@@ -1059,6 +1803,7 @@ function setMobileMenu(open) {
   els.menuBackdrop.hidden = !open;
   els.menuToggleBtn.setAttribute("aria-expanded", String(open));
   els.menuToggleBtn.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+  window.requestAnimationFrame(updateAllSlidingSwitches);
 }
 
 function closeMobileMenu() {
@@ -1079,16 +1824,18 @@ function setAppMode(nextMode) {
   els.instrumentModeBtn.classList.toggle("active", !isSuture && !isTable);
   els.sutureModeBtn.classList.toggle("active", isSuture);
   els.tableModeBtn.classList.toggle("active", isTable);
+  updateSlidingSwitch(els.instrumentModeBtn.parentElement);
   els.studyBtn.hidden = isTable;
   els.studyBtn.textContent = isSuture ? "Tabela de suturas" : "Tabela de estudo";
 
   if (isSuture) {
+    updateSlidingSwitch(els.sutureModeButtons);
     renderSutureItem();
     return;
   }
 
   if (isTable) {
-    resetTableQuiz();
+    restartTableSession();
     return;
   }
 
@@ -1272,6 +2019,7 @@ function setSutureMode(mode) {
   els.sutureModeButtons.querySelectorAll("button").forEach((button) => {
     button.classList.toggle("active", button.dataset.mode === mode);
   });
+  updateSlidingSwitch(els.sutureModeButtons);
 
   renderSutureItem();
 }
@@ -1326,7 +2074,7 @@ els.shuffleBtn.addEventListener("click", () => {
   }
 
   if (appMode === "table") {
-    resetTableQuiz();
+    restartTableSession();
     closeMobileMenu();
     return;
   }
@@ -1353,14 +2101,34 @@ els.rubricButtons.addEventListener("click", (event) => {
 });
 els.quadrantCountForm.addEventListener("submit", checkQuadrantCount);
 els.nextTableQuestionBtn.addEventListener("click", nextTableQuestion);
-els.restartTableBtn.addEventListener("click", resetTableQuiz);
+els.retryTableMistakesBtn.addEventListener("click", retryTableMistakes);
+els.restartTableBtn.addEventListener("click", restartTableSession);
+els.tablePracticeModeBtn.addEventListener("click", () => setTableMode("practice"));
+els.tableExamModeBtn.addEventListener("click", () => setTableMode("exam"));
+els.tableStudyModeBtn.addEventListener("click", () => setTableMode("study"));
+els.tableFilterSelect.addEventListener("change", () => {
+  tableState.filter = els.tableFilterSelect.value;
+  restartTableSession();
+});
+els.tableImageLightbox.addEventListener("click", (event) => {
+  if (event.target === els.tableImageLightbox) {
+    closeTableImageLightbox();
+  }
+});
+els.tableImageLightboxClose.addEventListener("click", closeTableImageLightbox);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
+    if (!els.tableImageLightbox.hidden) {
+      closeTableImageLightbox();
+    }
     closeMobileMenu();
   }
 });
+window.addEventListener("resize", updateAllSlidingSwitches);
 
 shuffleItemsSilently();
+populateTableFilters();
+updateAllSlidingSwitches();
 renderItem();
 renderStudyTable();
 renderSutureStudyTable();

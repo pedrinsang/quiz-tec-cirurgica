@@ -48,7 +48,8 @@ body {
 
 button,
 textarea,
-input {
+input,
+select {
   font: inherit;
   min-width: 0;
 }
@@ -81,6 +82,8 @@ button:active {
 
 button:focus-visible,
 textarea:focus-visible,
+input:focus-visible,
+select:focus-visible,
 summary:focus-visible {
   outline: 3px solid rgba(23, 112, 101, .22);
   outline-offset: 2px;
@@ -127,6 +130,10 @@ button.secondary {
   display: none;
 }
 
+.mobileViewportNotice {
+  display: none;
+}
+
 .menuToggle {
   width: 46px;
   min-height: 42px;
@@ -157,6 +164,10 @@ p {
   margin: 0;
 }
 
+img {
+  max-width: 100%;
+}
+
 .topbar p,
 .feedback {
   color: var(--muted);
@@ -172,11 +183,10 @@ p {
   gap: 12px;
   flex-wrap: wrap;
   justify-content: flex-end;
+  margin-left: auto;
   min-width: 0;
 }
 
-.modeSwitch,
-.modeButtons,
 .rubricButtons,
 .sutureControls {
   display: flex;
@@ -184,28 +194,114 @@ p {
   flex-wrap: wrap;
 }
 
+.modeSwitch,
+.modeButtons {
+  --active-index: 0;
+  --tab-count: 3;
+  --switch-gap: 8px;
+  --switch-padding: 4px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(var(--tab-count), minmax(0, 1fr));
+  gap: var(--switch-gap);
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
 .modeSwitch {
-  padding: 4px;
+  width: clamp(360px, 34vw, 430px);
+  padding: var(--switch-padding);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--panel-soft);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+@media (min-width: 901px) {
+  .modeSwitch {
+    order: 10;
+  }
+}
+
+.modeButtons {
+  width: 100%;
+  padding: var(--switch-padding);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-soft);
+}
+
+.modeSwitch::before,
+.modeButtons::before,
+.tableModeTabs::before {
+  content: none;
+}
+
+.slidingSwitchIndicator {
+  position: absolute;
+  z-index: 0;
+  top: var(--switch-padding);
+  bottom: auto;
+  left: var(--switch-padding);
+  width: var(--switch-indicator-width, 33.333%);
+  height: var(--switch-indicator-height, calc(100% - (var(--switch-padding) * 2)));
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 8px 18px rgba(59, 182, 163, .22);
+  transform: translate(var(--switch-indicator-x, 0px), var(--switch-indicator-y, 0px));
+  transition:
+    transform .28s cubic-bezier(.22, 1, .36, 1),
+    width .28s cubic-bezier(.22, 1, .36, 1),
+    height .28s cubic-bezier(.22, 1, .36, 1),
+    background-color .18s ease;
+  pointer-events: none;
+  will-change: transform, width, height;
+}
+
+.modeSwitch:has(#instrumentModeBtn.active),
+.modeButtons:has(> button:nth-of-type(1).active),
+.tableModeTabs:has(#tablePracticeModeBtn.active) {
+  --switch-indicator-x: 0px;
+  --switch-indicator-y: 0px;
+}
+
+.modeSwitch:has(#sutureModeBtn.active),
+.modeButtons:has(> button:nth-of-type(2).active),
+.tableModeTabs:has(#tableExamModeBtn.active) {
+  --switch-indicator-x: calc(var(--switch-indicator-width, 33.333%) + var(--switch-gap));
+  --switch-indicator-y: 0px;
+}
+
+.modeSwitch:has(#tableModeBtn.active),
+.modeButtons:has(> button:nth-of-type(3).active),
+.tableModeTabs:has(#tableStudyModeBtn.active) {
+  --switch-indicator-x: calc(var(--switch-indicator-width, 33.333%) + var(--switch-indicator-width, 33.333%) + var(--switch-gap) + var(--switch-gap));
+  --switch-indicator-y: 0px;
 }
 
 .modeSwitch button,
 .modeButtons button,
 .rubricButtons button {
+  position: relative;
+  z-index: 1;
   min-height: 34px;
   padding: 0 12px;
   border-color: transparent;
+  border-radius: 999px;
   background: transparent;
   color: var(--ink);
+  transition: color .18s ease, transform .16s ease, border-color .16s ease;
 }
 
 .modeSwitch button:hover,
-.modeSwitch button.active,
 .modeButtons button:hover,
-.modeButtons button.active,
+.tableModeTabs button:hover {
+  background: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
 .rubricButtons button:hover,
 .rubricButtons button.active {
   border-color: var(--accent);
@@ -214,7 +310,27 @@ p {
   box-shadow: none;
 }
 
-.score span {
+.modeSwitch button.active,
+.modeButtons button.active {
+  background: transparent;
+  border-color: transparent;
+  color: #06100e;
+  box-shadow: none;
+}
+
+.modeSwitch button:hover:not(.active),
+.modeButtons button:hover:not(.active) {
+  background: transparent;
+  color: var(--accent-strong);
+}
+
+.modeSwitch button:active,
+.modeButtons button:active,
+.tableModeTabs button:active {
+  transform: scale(.96);
+}
+
+#scoreText {
   min-width: 112px;
   font-weight: 700;
   text-align: center;
@@ -314,19 +430,24 @@ label {
   color: var(--accent-strong);
 }
 
-textarea {
+textarea,
+select {
   width: 100%;
-  min-height: 96px;
-  resize: vertical;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 12px;
   color: var(--ink);
   background: #101716;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
 }
 
-input {
+textarea {
+  min-height: 96px;
+  resize: vertical;
+  padding: 12px;
+}
+
+input,
+select {
   width: 100%;
   min-height: 42px;
   border: 1px solid var(--line);
@@ -336,8 +457,35 @@ input {
   background: #101716;
 }
 
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select {
+  appearance: none;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--accent-strong) 50%) calc(100% - 18px) 50% / 6px 6px no-repeat,
+    linear-gradient(135deg, var(--accent-strong) 50%, transparent 50%) calc(100% - 12px) 50% / 6px 6px no-repeat,
+    #101716;
+  padding-right: 34px;
+}
+
+select option {
+  background: var(--panel);
+  color: var(--ink);
+}
+
 textarea:focus,
-input:focus {
+input:focus,
+select:focus {
   outline: 3px solid rgba(31, 122, 107, .18);
   border-color: var(--accent);
 }
@@ -722,6 +870,34 @@ button.secondary:hover {
   padding: clamp(16px, 4vw, 34px);
 }
 
+.sutureWorkspace > .sutureModes {
+  grid-column: 1 / -1;
+  width: min(860px, 100%);
+  justify-self: start;
+}
+
+.sutureWorkspace > .sutureModes .modeButtons {
+  --switch-gap: 4px;
+  width: min(760px, 100%);
+  max-width: 100%;
+}
+
+.sutureWorkspace > .sutureModes .modeButtons button {
+  min-height: 44px;
+  padding-inline: clamp(6px, 1.4vw, 14px);
+  font-size: clamp(.78rem, 2.8vw, .95rem);
+  line-height: 1.15;
+  text-wrap: normal;
+}
+
+.sutureWorkspace:has(.sutureAnswerBox[hidden]) {
+  grid-template-columns: minmax(0, 980px);
+}
+
+.sutureWorkspace:has(.sutureAnswerBox[hidden]) .sutureSide {
+  display: none;
+}
+
 .tableWorkspace {
   flex: 1;
   display: grid;
@@ -759,6 +935,10 @@ button.secondary:hover {
   padding: 22px;
 }
 
+#tableStageLabel {
+  order: -2;
+}
+
 .tablePromptCard h2,
 .tableBoardHeader h2,
 .tableGroupPrompt h3 {
@@ -767,10 +947,36 @@ button.secondary:hover {
   overflow-wrap: anywhere;
 }
 
-.tablePromptCard > p,
 .tableBoardHeader p,
 .tableGroupPrompt p {
   color: var(--muted);
+}
+
+.tableQuestionBox {
+  display: grid;
+  gap: 6px;
+  border: 1px solid rgba(59, 182, 163, .42);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(59, 182, 163, .13), transparent 58%),
+    var(--panel-soft);
+  padding: 12px 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+}
+
+.tableQuestionBox span {
+  color: var(--accent-strong);
+  font-size: .76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.tableQuestionBox p {
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 750;
+  line-height: 1.35;
 }
 
 .quadrantCountForm {
@@ -781,6 +987,63 @@ button.secondary:hover {
 
 .quadrantCountForm label {
   grid-column: 1 / -1;
+}
+
+.tableControls {
+  display: contents;
+}
+
+.tableModeTabs {
+  --active-index: 0;
+  --tab-count: 3;
+  --switch-gap: 6px;
+  --switch-padding: 4px;
+  position: relative;
+  isolation: isolate;
+  order: -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--switch-gap);
+  overflow: hidden;
+  width: 100%;
+  padding: var(--switch-padding);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-soft);
+}
+
+.tableModeTabs button {
+  position: relative;
+  z-index: 1;
+  min-height: 38px;
+  padding: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  box-shadow: none;
+  transition: color .18s ease, transform .16s ease;
+}
+
+.tableModeTabs button.active {
+  background: transparent;
+  color: #07110f;
+}
+
+.tableModeTabs button:hover:not(.active) {
+  background: transparent;
+  color: var(--accent-strong);
+}
+
+.tableFilterControl {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.tableFilterControl select {
+  width: 100%;
 }
 
 .tableFeedback {
@@ -808,6 +1071,44 @@ button.secondary:hover {
   color: var(--danger);
   font-weight: 700;
   animation: feedbackShake .34s ease both;
+}
+
+.tableTheoryOptions {
+  display: grid;
+  gap: 8px;
+}
+
+.tableTheoryOption {
+  justify-content: start;
+  min-height: 44px;
+  border-color: var(--line);
+  background: var(--panel-soft);
+  color: var(--ink);
+  text-align: left;
+  box-shadow: none;
+}
+
+.tableTheoryOption:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.tableTheoryOption.correct {
+  border-color: var(--ok);
+  background: var(--soft-ok);
+  color: var(--ok);
+}
+
+.tableTheoryOption.wrong {
+  border-color: var(--danger);
+  background: var(--soft-danger);
+  color: var(--danger);
+}
+
+.tableTheoryOption:disabled {
+  cursor: default;
+  transform: none;
 }
 
 .perfectTableFeedback {
@@ -848,6 +1149,12 @@ button.secondary:hover {
   border-radius: 8px;
   background: #111918;
   box-shadow: var(--shadow-soft);
+  cursor: zoom-in;
+}
+
+.tableGroupImages img:focus-visible {
+  outline: 3px solid rgba(59, 182, 163, .28);
+  outline-offset: 2px;
 }
 
 .tableMaterialChip {
@@ -888,7 +1195,15 @@ button.secondary:hover {
   align-items: center;
 }
 
-.tableBoardHeader p {
+.tableBoardStats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.tableBoardHeader p,
+.tableBoardStats p {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel-soft);
@@ -897,11 +1212,54 @@ button.secondary:hover {
   padding: 8px 10px;
 }
 
+#tableTimerText {
+  color: var(--warn);
+  border-color: rgba(226, 185, 104, .45);
+  background: var(--soft-warn);
+}
+
 .surgicalTable {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(190px, 1fr));
   gap: 10px;
+  padding: 26px 44px 34px;
+}
+
+.tableOrientation {
+  position: absolute;
+  z-index: 2;
+  color: var(--muted);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.tableOrientationPatient {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tableOrientationInstrumenter {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tableOrientationLeft {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+.tableOrientationRight {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%) rotate(90deg);
 }
 
 .quadrantCell {
@@ -916,6 +1274,34 @@ button.secondary:hover {
   color: var(--ink);
   text-align: left;
   box-shadow: none;
+}
+
+.placedCount {
+  min-height: 18px;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.placedItems {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.placedItemChip {
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .04);
+  color: var(--ink);
+  padding: 4px 6px;
+  font-size: .72rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .quadrantCell:hover {
@@ -958,6 +1344,135 @@ button.secondary:hover {
 .quadrantCell.expected {
   border-color: var(--ok);
   box-shadow: inset 0 0 0 2px rgba(115, 213, 154, .28);
+}
+
+.studyBoard .quadrantCell {
+  cursor: pointer;
+}
+
+.studyBoard .quadrantCell:hover,
+.studyBoard .quadrantCell.selected {
+  border-color: var(--accent);
+  background: rgba(59, 182, 163, .14);
+  box-shadow: inset 0 0 0 1px rgba(59, 182, 163, .22);
+}
+
+.placedTapHint {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  border: 1px solid rgba(59, 182, 163, .35);
+  border-radius: 999px;
+  color: var(--accent-strong);
+  background: rgba(59, 182, 163, .1);
+  padding: 2px 8px;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.tableStudyMaterialList {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  align-items: stretch;
+}
+
+.tableStudyMaterialCard {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  padding: 10px;
+}
+
+.tableStudyMaterialCard strong {
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.tableStudyMaterialCard > span {
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 800;
+}
+
+.tableStudyMaterialImages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(74px, 1fr));
+  gap: 6px;
+}
+
+.tableStudyMaterialImages img {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111918;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.tableStudyEmpty {
+  grid-column: 1 / -1;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .025);
+  padding: 12px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.tableMistakeSummary {
+  max-height: 260px;
+  overflow: auto;
+}
+
+.tableMistakeSummary strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--danger);
+}
+
+.tableMistakeSummary ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.imageLightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(4, 8, 7, .82);
+  backdrop-filter: blur(8px);
+}
+
+.imageLightbox img {
+  max-width: min(92vw, 980px);
+  max-height: 88vh;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: #101716;
+  box-shadow: var(--shadow);
+  object-fit: contain;
+}
+
+.imageLightboxClose {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-color: var(--line-strong);
+  background: var(--panel-soft);
+  color: var(--accent-strong);
+  font-size: 1.6rem;
 }
 
 .sutureCard,
@@ -1286,6 +1801,10 @@ button.secondary:hover {
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
   }
+
+  .slidingSwitchIndicator {
+    transition-duration: .28s !important;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1300,7 +1819,7 @@ button.secondary:hover {
     justify-content: flex-start;
   }
 
-  .score span {
+  #scoreText {
     text-align: left;
   }
 
@@ -1312,6 +1831,20 @@ button.secondary:hover {
     gap: 16px;
   }
 
+  .sutureWorkspace:has(.sutureAnswerBox[hidden]) {
+    grid-template-columns: 1fr;
+  }
+
+  .sutureWorkspace > .sutureModes {
+    width: 100%;
+  }
+
+  .workspace,
+  .sutureWorkspace,
+  .tableWorkspace {
+    padding-inline: clamp(12px, 4vw, 22px);
+  }
+
   .answerPanel,
   .studyPreview,
   .sutureSide {
@@ -1320,6 +1853,30 @@ button.secondary:hover {
 
   .studyGroup {
     grid-template-columns: 1fr;
+  }
+
+  .tablePromptCard,
+  .tableBoardPanel {
+    width: 100%;
+  }
+
+  .tableBoardPanel {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .mobileViewportNotice {
+    display: block;
+    margin: 12px clamp(12px, 4vw, 24px) 0;
+    border: 1px solid rgba(226, 185, 104, .42);
+    border-left: 4px solid var(--warn);
+    border-radius: 8px;
+    background: var(--soft-warn);
+    color: var(--warn);
+    padding: 10px 12px;
+    font-size: .9rem;
+    font-weight: 800;
   }
 }
 
@@ -1448,6 +2005,18 @@ button.secondary:hover {
     gap: 6px;
   }
 
+  .score .modeSwitch {
+    grid-template-columns: 1fr;
+    border-radius: 18px;
+  }
+
+  .score .modeSwitch button {
+    display: grid;
+    place-items: center;
+    min-height: 42px;
+    justify-content: center;
+  }
+
   .modeSwitch button,
   .modeButtons button,
   .sutureControls button,
@@ -1459,7 +2028,7 @@ button.secondary:hover {
     min-width: 0;
   }
 
-  .score span {
+  #scoreText {
     width: 100%;
     min-width: 0;
     padding: 8px 10px;
@@ -1470,6 +2039,11 @@ button.secondary:hover {
   .sutureWorkspace,
   .tableWorkspace {
     padding: 12px;
+  }
+
+  .mobileViewportNotice {
+    margin-inline: 12px;
+    font-size: .84rem;
   }
 
   .photoStage {
@@ -1575,10 +2149,33 @@ button.secondary:hover {
     grid-template-columns: 1fr;
   }
 
+  .tableQuestionBox {
+    padding: 10px;
+  }
+
+  .tableQuestionBox p {
+    font-size: .95rem;
+  }
+
+  .tableModeTabs,
+  .modeButtons,
+  .modeSwitch {
+    --switch-gap: 4px;
+  }
+
+  .tableModeTabs button,
+  .modeButtons button,
+  .modeSwitch button {
+    padding-inline: 8px;
+    font-size: .9rem;
+  }
+
   .surgicalTable {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(86px, 1fr));
     gap: 6px;
+    padding: 22px 24px 28px;
+    min-width: 440px;
   }
 
   .quadrantCell {
@@ -1605,12 +2202,36 @@ button.secondary:hover {
     display: none;
   }
 
+  .placedCount,
+  .placedItemChip {
+    font-size: .62rem;
+  }
+
+  .placedItems {
+    gap: 3px;
+  }
+
+  .placedTapHint {
+    min-height: 20px;
+    padding-inline: 6px;
+    font-size: .6rem;
+  }
+
+  .tableOrientation {
+    font-size: .62rem;
+  }
+
   .tableBoardHeader {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .tableBoardHeader p {
+  .tableBoardStats {
+    justify-content: flex-start;
+  }
+
+  .tableBoardHeader p,
+  .tableBoardStats p {
     align-self: start;
   }
 
@@ -1622,6 +2243,18 @@ button.secondary:hover {
     min-height: 58px;
     padding: 8px;
     font-size: .78rem;
+  }
+
+  .tableStudyMaterialList {
+    grid-template-columns: 1fr;
+  }
+
+  .tableStudyMaterialCard {
+    padding: 9px;
+  }
+
+  .tableStudyMaterialImages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1639,6 +2272,8 @@ button.secondary:hover {
   .surgicalTable {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(78px, 1fr));
+    padding-inline: 20px;
+    min-width: 390px;
   }
 
   .quadrantCell {

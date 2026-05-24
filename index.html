@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quiz de Técnica Cirúrgica</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
   <main class="app">
@@ -26,6 +26,7 @@
         </div>
         <span id="scoreText">0 / 0</span>
         <div class="modeSwitch" aria-label="Modo do quiz">
+          <span class="slidingSwitchIndicator" aria-hidden="true"></span>
           <button id="instrumentModeBtn" class="active" type="button">Instrumentais</button>
           <button id="sutureModeBtn" type="button">Suturas</button>
           <button id="tableModeBtn" type="button">Mesa cirúrgica</button>
@@ -34,6 +35,10 @@
         <button id="shuffleBtn" type="button">Embaralhar</button>
       </div>
     </section>
+
+    <div class="mobileViewportNotice" role="note">
+      Este site funciona melhor em telas maiores, como tablets e computadores.
+    </div>
 
     <section class="workspace" id="instrumentWorkspace">
       <div class="photoStage" id="photoStage" aria-live="polite"></div>
@@ -75,6 +80,16 @@
     </section>
 
     <section class="sutureWorkspace" id="sutureWorkspace" hidden>
+      <section class="sutureModes">
+        <h2>Modo de treino</h2>
+        <div class="modeButtons" id="sutureModeButtons">
+          <span class="slidingSwitchIndicator" aria-hidden="true"></span>
+          <button class="active" type="button" data-mode="oral">Sorteio oral</button>
+          <button type="button" data-mode="question">Perguntas</button>
+          <button type="button" data-mode="compare">Comparação</button>
+        </div>
+      </section>
+
       <section class="sutureCard" aria-live="polite">
         <div class="sutureMeta" id="sutureMeta"></div>
         <h2 id="sutureTitle">Sutura</h2>
@@ -101,15 +116,6 @@
       </section>
 
       <aside class="sutureSide">
-        <section class="sutureModes">
-          <h2>Modo de treino</h2>
-          <div class="modeButtons" id="sutureModeButtons">
-            <button class="active" type="button" data-mode="oral">Sorteio oral</button>
-            <button type="button" data-mode="question">Perguntas</button>
-            <button type="button" data-mode="compare">Comparação</button>
-          </div>
-        </section>
-
         <section class="sutureAnswerBox" id="sutureAnswerBox" hidden>
           <h2>Gabarito</h2>
           <div id="sutureAnswerContent"></div>
@@ -121,7 +127,25 @@
       <section class="tablePromptCard">
         <div class="sutureMeta" id="tableStageLabel">Mesa cirúrgica</div>
         <h2 id="tableQuestionTitle">Preparação da mesa</h2>
-        <p id="tableQuestionText">Antes de montar a mesa, responda quantos quadrantes ela terá.</p>
+        <div class="tableQuestionBox">
+          <span>Pergunta atual</span>
+          <p id="tableQuestionText">Antes de montar a mesa, responda quantos quadrantes ela terá.</p>
+        </div>
+
+        <div class="tableControls">
+          <div class="tableModeTabs" role="group" aria-label="Modo da mesa">
+            <span class="slidingSwitchIndicator" aria-hidden="true"></span>
+            <button id="tablePracticeModeBtn" class="active" type="button">Treino</button>
+            <button id="tableExamModeBtn" type="button">Prova</button>
+            <button id="tableStudyModeBtn" type="button">Estudo</button>
+          </div>
+          <label class="tableFilterControl" for="tableFilterSelect">
+            Grupo
+            <select id="tableFilterSelect">
+              <option value="all">Todos</option>
+            </select>
+          </label>
+        </div>
 
         <form id="quadrantCountForm" class="quadrantCountForm" autocomplete="off">
           <label for="quadrantCountInput">Quantos quadrantes se separa a mesa?</label>
@@ -129,7 +153,9 @@
           <button type="submit">Conferir</button>
         </form>
 
-        <div class="tableFeedback" id="tableFeedback" aria-live="polite"></div>
+        <div class="tableFeedback" id="tableFeedback" aria-live="polite" hidden></div>
+
+        <div class="tableTheoryOptions" id="tableTheoryOptions" hidden></div>
 
         <section class="tableGroupPrompt" id="tableGroupPrompt" hidden>
           <h3 id="tableGroupTitle">Grupo</h3>
@@ -139,6 +165,7 @@
 
         <div class="tableActions">
           <button id="nextTableQuestionBtn" type="button" hidden>Próxima pergunta</button>
+          <button id="retryTableMistakesBtn" class="secondary" type="button" hidden>Refazer erros</button>
           <button id="restartTableBtn" class="secondary" type="button">Recomeçar mesa</button>
         </div>
       </section>
@@ -146,11 +173,19 @@
       <aside class="tableBoardPanel" id="tableBoardPanel" hidden>
         <div class="tableBoardHeader">
           <h2>Mesa virtual</h2>
-          <p id="tableScoreText">0 / 0</p>
+          <div class="tableBoardStats">
+            <p id="tableScoreText">0 / 0</p>
+            <p id="tableTimerText" hidden>00:00</p>
+          </div>
         </div>
         <div class="surgicalTable" id="surgicalTable" aria-label="Mesa cirúrgica virtual"></div>
       </aside>
     </section>
+
+    <div class="imageLightbox" id="tableImageLightbox" hidden>
+      <button id="tableImageLightboxClose" class="imageLightboxClose" type="button" aria-label="Fechar imagem">×</button>
+      <img id="tableImageLightboxImg" alt="">
+    </div>
 
     <section class="studySection" id="studySection">
       <div class="studyHeader">
@@ -181,6 +216,6 @@
 
   <script src="quiz-data.js" charset="utf-8"></script>
   <script src="suturas-data.js" charset="utf-8"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>
