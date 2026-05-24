@@ -1,437 +1,644 @@
 window.SUTURE_ITEMS = [
   {
-    id: "isolada-simples",
-    nome: "Isolada Simples",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Ponto simples separado",
-    comeca: "Comeca em uma borda da ferida, geralmente a poucos milimetros da margem.",
-    trajeto: "A agulha atravessa perpendicularmente um lado, cruza o leito da ferida e sai no lado oposto em distancia semelhante.",
-    termina: "O no fica lateralizado, sem ficar exatamente sobre a linha da ferida.",
-    servePara: "Aproximar bordas de pele ou tecidos em feridas simples, com controle ponto a ponto da tensao.",
+    id: "interrompida-simples",
+    nome: "Interrompida simples",
+    grupo: "Suturas interrompidas",
+    tipo: "Aposicao",
+    comeca: "A agulha entra a mais de 0,5 cm da borda incisada.",
+    trajeto: "Passa perpendicularmente pelo tecido de um lado, atravessa quantidade igual de tecido no lado oposto e o ponto seguinte fica a distancia igual ao tamanho do ponto anterior.",
+    termina: "O no e amarrado fora da linha de incisao, com pontas longas de 0,5 a 1,0 cm ou curtas quando o no fica sepultado.",
+    servePara: "E a sutura mais usada e versatil; indicada para suturas internas e externas quando se deseja boa aposicao e controle ponto a ponto da tensao.",
     pontosChave: [
-      "E interrompida: cada ponto tem no proprio.",
-      "As passagens devem ser simetricas nas duas bordas.",
-      "Serve para aproximacao basica e facil remocao ponto a ponto."
+      "Cada ponto e independente.",
+      "Mantem boa aposicao quando feita com tracao moderada.",
+      "Pode causar inversao indesejavel se apertada demais."
     ],
     errosComuns: [
-      "Apertar demais e estrangular o tecido.",
-      "Deixar distancias diferentes das bordas.",
-      "Colocar o no sobre a linha de incisao."
+      "Colocar o no sobre a linha de incisao.",
+      "Fazer passagens assimetricas.",
+      "Apertar demais e inverter as bordas."
     ],
     perguntas: [
-      "Como voce faria uma isolada simples no EVA?",
-      "Onde deve ficar o no da isolada simples?",
-      "Quando a isolada simples e uma boa escolha?"
-    ]
-  },
-  {
-    id: "sultan-x",
-    nome: "Sultan \"X\"",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Ponto em X",
-    comeca: "Comeca como um ponto simples, entrando em uma borda e saindo na borda oposta.",
-    trajeto: "Antes de dar o no, faz uma segunda passagem cruzada, formando um X sobre a ferida.",
-    termina: "O no fixa as duas passagens, mantendo o cruzamento central.",
-    servePara: "Dar maior resistencia e distribuir melhor a tensao que um ponto simples.",
-    pontosChave: [
-      "E interrompida, mas tem duas passagens antes do no.",
-      "O desenho final lembra um X.",
-      "Util em aproximacoes que precisam de reforco."
-    ],
-    errosComuns: [
-      "Fazer duas passagens paralelas em vez de cruzadas.",
-      "Confundir com colchoeiro horizontal.",
-      "Apertar o X ate causar isquemia."
-    ],
-    perguntas: [
-      "Por que o Sultan recebe o nome de X?",
-      "Qual a vantagem dele em relacao ao ponto simples?",
-      "Como voce posiciona a segunda passagem?"
+      "Qual e a distancia minima da borda na interrompida simples?",
+      "Onde deve ficar o no?",
+      "Por que ela permite controle ponto a ponto da tensao?"
     ]
   },
   {
     id: "wolff",
     nome: "Wolff",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Colchoeiro horizontal",
-    comeca: "Comeca longe ou moderadamente distante da borda, atravessando de um lado para o outro.",
-    trajeto: "Retorna em uma segunda passagem paralela a primeira, no sentido oposto, formando um colchoeiro horizontal.",
-    termina: "O no aproxima as bordas e distribui a tensao lateralmente.",
-    servePara: "Aproximar tecidos sob tensao e ajudar na eversao das bordas.",
+    grupo: "Suturas interrompidas",
+    tipo: "Horizontal em U",
+    comeca: "Inicia em uma borda e atravessa para a borda oposta.",
+    trajeto: "Faz uma segunda passagem paralela, formando um quadrado, com as duas extremidades do fio saindo pelo mesmo lado da ferida.",
+    termina: "O no aproxima as bordas e produz leve eversao se colocado corretamente.",
+    servePara: "Indicada para feridas sob tensao moderada, podendo reduzir espaco morto ou funcionar como sutura de tensao quando distante da borda.",
     pontosChave: [
-      "E interrompida.",
-      "Tem duas passagens paralelas.",
-      "Diferente do Donatti, nao faz uma passagem longe e outra perto em plano vertical."
+      "E horizontal em U.",
+      "Promove leve eversao.",
+      "Usa menos material e e de execucao rapida."
     ],
     errosComuns: [
-      "Chamar de Donatti.",
-      "Fazer as passagens muito proximas e perder a funcao de sustentacao.",
-      "Apertar demais e marcar o tecido."
+      "Confundir com Donatti.",
+      "Apertar demais e reduzir suprimento sanguineo.",
+      "Nao manter o formato quadrado."
     ],
     perguntas: [
-      "Qual e a principal diferenca entre Wolff e Donatti?",
-      "Como fica o trajeto da agulha no Wolff?",
-      "Para que serve o colchoeiro horizontal?"
+      "Qual formato o Wolff forma?",
+      "Quando ele e indicado?",
+      "Qual risco existe se os pontos forem apertados demais?"
     ]
   },
   {
     id: "donatti",
     nome: "Donatti",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Colchoeiro vertical",
-    comeca: "Comeca longe da borda da ferida, atravessando profundamente de um lado ao outro.",
-    trajeto: "Depois retorna mais perto da borda, em plano mais superficial, fazendo o padrao longe-perto/perto-longe.",
-    termina: "O no aproxima e everte as bordas, com boa sustentacao.",
-    servePara: "Promover eversao das bordas e resistencia em feridas com maior tensao.",
+    grupo: "Suturas interrompidas",
+    tipo: "Vertical em U",
+    comeca: "A primeira passagem e feita a distancia maior que 0,5 cm da borda.",
+    trajeto: "A segunda passagem retorna perto da borda, cerca de 2 a 3 mm, em padrao vertical.",
+    termina: "O no promove aposicao completa e precisa, com leve eversao.",
+    servePara: "Da suporte a tecidos sob tensao e pode auxiliar uma primeira linha de sutura.",
     pontosChave: [
-      "E interrompida.",
-      "Tem uma passagem longe e profunda e outra perto e superficial.",
-      "E classico para comparar com Wolff."
+      "E vertical em U.",
+      "A primeira passagem e longe e a segunda e perto.",
+      "Altera pouco o suprimento sanguineo quando colocado distante da borda."
     ],
     errosComuns: [
-      "Dizer que e igual ao Wolff.",
-      "Nao diferenciar passagem longe de passagem perto.",
-      "Inverter a explicacao sem manter a simetria."
+      "Descrever como horizontal.",
+      "Nao diferenciar passagem longe e passagem perto.",
+      "Ignorar que e mais demorada e gera maior reacao inflamatoria."
     ],
     perguntas: [
-      "Explique o longe-perto do Donatti.",
-      "Por que o Donatti ajuda na eversao?",
-      "Como voce diferenciaria Donatti de Wolff para o professor?"
+      "Qual e a ordem das passagens no Donatti?",
+      "Que efeito ele tem nas bordas?",
+      "Como diferenciar Donatti de Wolff?"
     ]
   },
   {
-    id: "lembert-isolada",
-    nome: "Lembert isolada",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Invaginante seromuscular",
-    comeca: "Comeca na serosa, proximo a borda, sem atravessar a mucosa.",
-    trajeto: "Faz passagens seromusculares que aproximam e invaginam as bordas.",
-    termina: "Cada ponto e amarrado individualmente, mantendo a inversao da parede.",
-    servePara: "Invaginar e reforcar suturas em orgaos ocos, sem penetrar a luz.",
+    id: "sultan-x",
+    nome: "Sultan ou X",
+    grupo: "Suturas interrompidas",
+    tipo: "Cruzada",
+    comeca: "A agulha penetra de um lado da incisao e passa perpendicularmente pela ferida.",
+    trajeto: "A segunda passagem e feita paralela a primeira, a 5 a 10 mm, formando o ponto cruzado em X.",
+    termina: "O no fixa as duas passagens e mantem a aposicao.",
+    servePara: "Sutura de aposicao que modifica o U horizontal, sem alterar o suprimento sanguineo mesmo sob tensao e prevenindo eversao.",
     pontosChave: [
-      "E extramucosa ou seromuscular.",
-      "Nao deve entrar na mucosa.",
-      "Pode existir como pontos isolados ou em forma continua."
+      "Tambem chamada de cruzada.",
+      "E uma modificacao do U horizontal.",
+      "Nao promove eversao."
     ],
     errosComuns: [
-      "Confundir com Connel, que e seromucosa.",
-      "Atravessar a luz do orgao.",
-      "Esquecer que esta ficha e a versao isolada."
+      "Fazer um colchoeiro horizontal sem cruzar.",
+      "Nao respeitar o afastamento de 5 a 10 mm entre passagens.",
+      "Dizer que e sutura evertente."
     ],
     perguntas: [
-      "A Lembert isolada atravessa mucosa?",
-      "Qual e o efeito dela sobre as bordas?",
-      "Em que tipo de tecido ela e cobrada com frequencia?"
+      "Por que o Sultan tambem e chamado de X?",
+      "Qual sutura ele modifica?",
+      "Qual efeito ele evita nas bordas?"
+    ]
+  },
+  {
+    id: "longe-perto-perto-longe",
+    nome: "Longe-perto-perto-longe",
+    grupo: "Suturas interrompidas",
+    tipo: "Combinacao com sutura de tensao",
+    comeca: "Comeca no componente longe, afastado da borda.",
+    trajeto: "Segue em movimento espiral: longe, perto, perto e longe, combinando reducao de tensao com aposicao.",
+    termina: "O no aproxima as bordas sem tracao excessiva.",
+    servePara: "Indicada quando a pele requer tensao moderada para aposicao; o componente longe reduz tensao e o perto faz aposicao.",
+    pontosChave: [
+      "A ordem do nome e o gabarito.",
+      "Tem forca de tensao maior que a interrompida simples.",
+      "Tracao excessiva pode inverter a incisao."
+    ],
+    errosComuns: [
+      "Trocar por longe-longe-perto-perto.",
+      "Apertar demais.",
+      "Nao explicar a funcao do componente longe e do componente perto."
+    ],
+    perguntas: [
+      "Qual e a sequencia exata?",
+      "Qual componente reduz tensao?",
+      "Qual componente faz aposicao?"
+    ]
+  },
+  {
+    id: "longe-longe-perto-perto",
+    nome: "Longe-longe-perto-perto",
+    grupo: "Suturas interrompidas",
+    tipo: "Padrao de distancia",
+    comeca: "Comeca longe da borda.",
+    trajeto: "As duas primeiras referencias ficam longe da margem e as duas ultimas ficam perto da margem.",
+    termina: "O no fecha o ponto mantendo a sequencia longe-longe-perto-perto.",
+    servePara: "Treinar controle de distancia e tensao em padrao citado junto das variacoes longe-perto.",
+    pontosChave: [
+      "As duas primeiras passagens sao longe.",
+      "As duas ultimas sao perto.",
+      "Diferencia-se da longe-perto-perto-longe pela ordem."
+    ],
+    errosComuns: [
+      "Misturar a ordem.",
+      "Chamar de Donatti sem explicar o padrao.",
+      "Nao manter distancias proporcionais."
+    ],
+    perguntas: [
+      "Qual e a ordem completa?",
+      "Como ela difere da longe-perto-perto-longe?",
+      "O que significa longe e perto?"
+    ]
+  },
+  {
+    id: "perto-longe",
+    nome: "Perto-longe",
+    grupo: "Suturas interrompidas",
+    tipo: "Padrao de distancia",
+    comeca: "Comeca perto da borda.",
+    trajeto: "Segue da passagem perto para a passagem longe, conforme o esquema de distancias da borda.",
+    termina: "O no mantem a relacao perto-longe.",
+    servePara: "Treinar a ordem das passagens pela distancia em relacao a borda da ferida.",
+    pontosChave: [
+      "A ordem do nome e o gabarito.",
+      "Perto e longe se referem a distancia da margem.",
+      "Aparece no esquema junto de longe-perto e dos padroes combinados."
+    ],
+    errosComuns: [
+      "Inverter para longe-perto.",
+      "Nao diferenciar distancia da borda.",
+      "Apertar demais e deformar as bordas."
+    ],
+    perguntas: [
+      "Por onde comeca a perto-longe?",
+      "O que significa perto?",
+      "Como ela difere da longe-perto?"
+    ]
+  },
+  {
+    id: "longe-perto",
+    nome: "Longe-perto",
+    grupo: "Suturas interrompidas",
+    tipo: "Padrao de distancia",
+    comeca: "Comeca longe da borda.",
+    trajeto: "Segue da passagem longe para a passagem perto, conforme o esquema de distancias da borda.",
+    termina: "O no mantem a relacao longe-perto.",
+    servePara: "Treinar a ordem das passagens pela distancia em relacao a borda da ferida.",
+    pontosChave: [
+      "A ordem do nome e o gabarito.",
+      "Longe e perto se referem a distancia da margem.",
+      "Aparece no esquema junto de perto-longe e dos padroes combinados."
+    ],
+    errosComuns: [
+      "Inverter para perto-longe.",
+      "Nao manter distancia proporcional.",
+      "Confundir com longe-perto-perto-longe."
+    ],
+    perguntas: [
+      "Por onde comeca a longe-perto?",
+      "O que significa longe?",
+      "Como ela difere da perto-longe?"
+    ]
+  },
+  {
+    id: "jaquetao",
+    nome: "Jaquetao",
+    grupo: "Suturas interrompidas",
+    tipo: "Sobreposicao",
+    comeca: "Inicia de modo a permitir que uma borda fique sobre a outra.",
+    trajeto: "As passagens aproximam os tecidos em padrao de sobreposicao.",
+    termina: "O no mantem uma borda sobreposta a outra.",
+    servePara: "Indicada principalmente na reducao de onfalocele em bovinos e equinos.",
+    pontosChave: [
+      "E sutura de sobreposicao.",
+      "A indicacao classica do PDF e onfalocele.",
+      "Nao e padrao de aposicao simples."
+    ],
+    errosComuns: [
+      "Descrever como ponto simples.",
+      "Esquecer a indicacao em onfalocele.",
+      "Nao mencionar sobreposicao."
+    ],
+    perguntas: [
+      "Qual e a classificacao de bordas do Jaquetao?",
+      "Qual indicacao principal aparece no PDF?",
+      "O que diferencia de uma sutura de aposicao?"
+    ]
+  },
+  {
+    id: "sutura-em-oito",
+    nome: "Sutura em oito",
+    grupo: "Suturas interrompidas",
+    tipo: "Ponto em oito",
+    comeca: "Inicia como ponto isolado com trajetos que se cruzam.",
+    trajeto: "As passagens formam desenho semelhante ao numero oito sobre os tecidos.",
+    termina: "O no fixa o cruzamento do ponto.",
+    servePara: "Padrao interrompido reconhecido pelo desenho em oito, apresentado junto das suturas isoladas.",
+    pontosChave: [
+      "O reconhecimento principal e o desenho.",
+      "E ponto isolado.",
+      "Diferencia-se do Sultan pelo padrao grafico cobrado."
+    ],
+    errosComuns: [
+      "Confundir com X/Sultan.",
+      "Nao cruzar os trajetos.",
+      "Responder apenas ponto simples."
+    ],
+    perguntas: [
+      "Como reconhecer a sutura em oito?",
+      "Ela e isolada ou continua?",
+      "Qual e o principal detalhe visual?"
     ]
   },
   {
     id: "gelly",
     nome: "Gelly",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Ponto invaginante em U",
-    comeca: "Comeca em uma face serosa, mantendo a agulha em plano nao perfurante.",
-    trajeto: "Faz passagens em U que aproximam as serosas, favorecem invaginacao e ajudam a obliterar espaco morto.",
-    termina: "O no fecha o ponto isolado, mantendo o padrao nao contaminante.",
-    servePara: "Invaginar tecidos e reduzir espaco morto, especialmente quando cobrada como sutura nao contaminante.",
+    grupo: "Suturas interrompidas",
+    tipo: "Invaginante",
+    comeca: "Inicia na parede visceral, respeitando o plano seroso/submucoso indicado no esquema.",
+    trajeto: "As passagens favorecem invaginacao das camadas, sem ser tratada como simples sutura de pele.",
+    termina: "O no mantem o ponto invaginante.",
+    servePara: "Sutura visceral apresentada no PDF junto ao esquema de tunicas e pontos isolados.",
     pontosChave: [
-      "E interrompida.",
-      "Tem finalidade invaginante e pode ser cobrada para reducao de espaco morto.",
-      "A preocupacao principal e manter o padrao nao perfurante."
+      "Tem finalidade invaginante.",
+      "Aparece no contexto de suturas viscerais.",
+      "Nao deve ser descrita como simples aposicao de pele."
     ],
     errosComuns: [
-      "Tratar como ponto simples de pele.",
-      "Nao falar em invaginacao.",
-      "Atravessar todas as camadas."
+      "Chamar de isolada simples.",
+      "Nao mencionar invaginacao.",
+      "Ignorar as camadas viscerais."
     ],
     perguntas: [
       "Qual e a finalidade da Gelly?",
-      "O que voce precisa evitar ao passar a agulha?",
-      "Por que ela e considerada invaginante?"
+      "Em que contexto ela aparece no PDF?",
+      "Por que nao e apenas uma sutura simples de pele?"
     ]
   },
   {
-    id: "longe-perto-perto-longe",
-    nome: "Longe-Perto-Perto-Longe",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Padrao longe-perto simetrico",
-    comeca: "Comeca longe da borda em um lado.",
-    trajeto: "Sai perto da borda oposta, entra perto no outro lado e termina longe no lado inicial/oposto conforme o treino no EVA.",
-    termina: "O no aproxima as bordas com distribuicao de tensao entre pontos longe e perto.",
-    servePara: "Treinar controle de profundidade e tensao, alternando passagens longe e perto da margem.",
+    id: "kurschner",
+    nome: "Continua simples ou Kurschner",
+    grupo: "Suturas continuas",
+    tipo: "Aposicao continua",
+    comeca: "Inicia com no no comeco da sutura, que pode ficar escondido.",
+    trajeto: "Usa uma serie de passagens simples, perpendiculares a linha de incisao, reintroduzidas na mesma direcao da anterior.",
+    termina: "No final, as pontas do fio sao amarradas com no minimo quatro camadas de nos, ou duas de cirurgiao.",
+    servePara: "Fechamento rapido de subcutaneo e fascia quando nao ha planos de tensao, e tecidos que requerem minima forca de seguranca com maxima aposicao.",
     pontosChave: [
-      "A sequencia do nome e o mapa da agulha.",
-      "Longe e perto se referem a distancia da borda.",
-      "O professor pode cobrar a ordem exata."
+      "O fio nao e cortado entre os pontos.",
+      "Usa menos material e diminui o tempo cirurgico.",
+      "O rompimento pode comprometer toda a linha."
     ],
     errosComuns: [
-      "Trocar a ordem para longe-longe-perto-perto.",
-      "Nao manter simetria no EVA.",
-      "Responder apenas o nome sem explicar o trajeto."
+      "Fazer pontos isolados.",
+      "Esquecer o no inicial ou final.",
+      "Usar em plano com tensao importante."
     ],
     perguntas: [
-      "Fale a ordem exata dessa sutura.",
-      "O que significa longe e perto nesse contexto?",
-      "Como voce evitaria confundir com longe-longe-perto-perto?"
-    ]
-  },
-  {
-    id: "longe-longe-perto-perto",
-    nome: "Longe-Longe-Perto-Perto",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Padrao sequencial por distancia",
-    comeca: "Comeca longe da borda.",
-    trajeto: "Faz as duas primeiras passagens longe da margem e depois as duas passagens perto da margem.",
-    termina: "O no fecha o ponto mantendo a relacao longe-longe-perto-perto.",
-    servePara: "Treinar sequencia e distribuicao de tensao em ponto com passagens de profundidades diferentes.",
-    pontosChave: [
-      "As duas primeiras referencias sao longe.",
-      "As duas ultimas referencias sao perto.",
-      "A ordem e a parte mais cobrada."
-    ],
-    errosComuns: [
-      "Misturar com longe-perto-perto-longe.",
-      "Perder a ordem ao atravessar o EVA.",
-      "Nao dizer para que serve a alternancia de distancia."
-    ],
-    perguntas: [
-      "Qual e a ordem completa do trajeto?",
-      "Como voce marcaria isso mentalmente antes de passar a agulha?",
-      "Qual e a diferenca para perto-perto-longe-longe?"
-    ]
-  },
-  {
-    id: "perto-perto-longe-longe",
-    nome: "Perto-Perto-Longe-Longe",
-    grupo: "Sutura interrompida ou isolada",
-    tipo: "Padrao sequencial por distancia",
-    comeca: "Comeca perto da borda.",
-    trajeto: "As duas primeiras passagens sao perto da margem e as duas ultimas ficam longe da margem.",
-    termina: "O no encerra o ponto mantendo a sequencia perto-perto-longe-longe.",
-    servePara: "Treinar controle de entrada e saida em distancias diferentes da borda.",
-    pontosChave: [
-      "Comeca perto, nao longe.",
-      "A sequencia e o principal gabarito.",
-      "Deve manter distancias proporcionais."
-    ],
-    errosComuns: [
-      "Comecar longe por habito.",
-      "Confundir com longe-longe-perto-perto.",
-      "Nao verbalizar a ordem completa."
-    ],
-    perguntas: [
-      "Por onde comeca essa sutura?",
-      "Fale a sequencia sem olhar.",
-      "Qual detalhe diferencia esta da longe-longe-perto-perto?"
-    ]
-  },
-  {
-    id: "continua-simples",
-    nome: "Continua Simples",
-    grupo: "Sutura continua",
-    tipo: "Pontos simples em sequencia",
-    comeca: "Comeca com um ponto inicial ancorado por no em uma extremidade da ferida.",
-    trajeto: "A agulha segue em passagens simples sucessivas, mantendo espacamento regular ate o final.",
-    termina: "Finaliza com no na ultima alcada ou com arremate adequado.",
-    servePara: "Fechar planos longos com rapidez e distribuicao continua da tensao.",
-    pontosChave: [
-      "E continua: o mesmo fio percorre toda a linha.",
-      "Exige espacamento e tensao constantes.",
-      "Se romper em um ponto, pode comprometer uma area maior."
-    ],
-    errosComuns: [
-      "Esquecer o no inicial.",
-      "Variar muito a distancia entre passagens.",
-      "Apertar demais e franzir o tecido."
-    ],
-    perguntas: [
-      "Como voce inicia uma sutura continua simples?",
-      "Qual e a vantagem de uma continua simples?",
-      "Qual e o risco se a tensao ficar irregular?"
-    ]
-  },
-  {
-    id: "colchoeiro-continuo",
-    nome: "Colchoeiro",
-    grupo: "Sutura continua",
-    tipo: "Colchoeiro continuo",
-    comeca: "Comeca com no de ancoragem em uma extremidade.",
-    trajeto: "Segue repetindo passagens de colchoeiro ao longo da ferida, mantendo o fio continuo.",
-    termina: "Finaliza com arremate na extremidade oposta.",
-    servePara: "Distribuir tensao e favorecer eversao ou sustentacao ao longo de uma linha extensa.",
-    pontosChave: [
-      "E o principio do colchoeiro aplicado de forma continua.",
-      "Precisa de tensao uniforme em toda a extensao.",
-      "Diferencia-se do Wolff por nao ser ponto isolado."
-    ],
-    errosComuns: [
-      "Fazer pontos separados.",
-      "Perder o paralelismo das passagens.",
-      "Nao controlar a tensao do fio."
-    ],
-    perguntas: [
-      "O que muda entre Wolff e colchoeiro continuo?",
-      "Como voce mantem a tensao uniforme?",
-      "Para que serve esse padrao?"
+      "Qual outro nome da continua simples?",
+      "Como ela termina?",
+      "Em quais planos ela e indicada?"
     ]
   },
   {
     id: "festonada",
-    nome: "Festonada",
-    grupo: "Sutura continua",
+    nome: "Festonada, retrograda, ancorada de Ford ou Reverdin",
+    grupo: "Suturas continuas",
     tipo: "Continua bloqueada",
-    comeca: "Comeca como continua simples, com no inicial.",
-    trajeto: "A cada passagem, o fio e passado pela alcada anterior, criando um bloqueio em cadeia.",
-    termina: "Finaliza com no na ultima alcada.",
-    servePara: "Dar mais seguranca e hemostasia a uma sutura continua, pois cada ponto fica travado.",
+    comeca: "Comeca como uma sutura continua simples.",
+    trajeto: "A cada passagem atraves dos tecidos, o fio e unido ao ponto anterior.",
+    termina: "Finaliza com no ao fim da linha.",
+    servePara: "Aumenta a estabilidade caso falhe um no ou parte da linha de sutura.",
     pontosChave: [
-      "Tambem pode ser chamada de continua ancorada ou bloqueada.",
-      "A alcada trava cada passagem.",
-      "Costuma marcar mais o tecido que a continua simples."
+      "E modificacao da continua simples.",
+      "Cada passagem fica ancorada no ponto anterior.",
+      "Tambem recebe os nomes retrograda, ancorada de Ford ou Reverdin."
     ],
     errosComuns: [
-      "Fazer continua simples sem bloquear.",
-      "Bloquear com tensao excessiva.",
-      "Nao explicar a funcao da alcada."
+      "Fazer continua simples sem ancorar.",
+      "Nao citar a maior estabilidade.",
+      "Apertar demais e causar necrose na pele."
     ],
     perguntas: [
-      "O que torna a festonada diferente da continua simples?",
-      "Para que serve o bloqueio da alcada?",
-      "Qual cuidado com a tensao?"
+      "Quais sinonimos a festonada recebe?",
+      "O que acontece a cada passagem?",
+      "Qual e a principal vantagem?"
     ]
   },
   {
-    id: "connel",
-    nome: "Connel (seromucosa)",
-    grupo: "Sutura continua",
-    tipo: "Invaginante seromucosa",
-    comeca: "Comeca com no inicial e entrada que envolve serosa, muscular e mucosa.",
-    trajeto: "Segue continuamente com passagens que penetram a mucosa e promovem invaginacao das bordas.",
-    termina: "Fecha com arremate no final da linha.",
-    servePara: "Fechamento invaginante de orgaos ocos quando se aceita penetrar a mucosa.",
+    id: "colchoeiro-continuo",
+    nome: "Colchoeiro ou U continua",
+    grupo: "Suturas continuas",
+    tipo: "Colchoeiro continuo",
+    comeca: "Inicia como um ponto isolado simples.",
+    trajeto: "Avanca 1 a 2 cm; a segunda passagem atravessa os tecidos perpendicularmente a incisao, depois a agulha avanca mais 1 a 2 cm e entra na direcao contralateral.",
+    termina: "Finaliza com arremate ao fim da linha.",
+    servePara: "Pode ser usada na pele quando ha indicacao de sutura continua e certo grau de eversao.",
     pontosChave: [
-      "E seromucosa: pega mucosa.",
-      "E continua e invaginante.",
-      "Comparacao obrigatoria: Connel pega mucosa, Cushing nao."
+      "Tambem chamada U continua.",
+      "A rapidez no fechamento e a principal vantagem.",
+      "Promove certo grau de eversao."
     ],
     errosComuns: [
-      "Dizer que e seromuscular.",
-      "Confundir com Cushing.",
-      "Nao mencionar invaginacao."
+      "Confundir com Wolff isolado.",
+      "Nao manter avancos regulares de 1 a 2 cm.",
+      "Esquecer que e continua."
     ],
     perguntas: [
-      "A Connel atravessa mucosa?",
-      "Qual e a diferenca entre Connel e Cushing?",
-      "Qual e o efeito dela nas bordas?"
+      "Qual e o avanco aproximado entre passagens?",
+      "Quando pode ser usada na pele?",
+      "Qual e sua principal vantagem?"
     ]
   },
   {
-    id: "cushing",
-    nome: "Cushing (seromuscular)",
-    grupo: "Sutura continua",
-    tipo: "Invaginante seromuscular",
-    comeca: "Comeca com no inicial em plano seromuscular.",
-    trajeto: "Segue paralela a borda, com passagens seromusculares, sem penetrar a mucosa.",
-    termina: "Finaliza com arremate mantendo a invaginacao.",
-    servePara: "Invaginar e reforcar orgaos ocos sem expor o fio a luz do orgao.",
+    id: "bunnel",
+    nome: "Bunnel",
+    grupo: "Suturas continuas",
+    tipo: "Tendao",
+    comeca: "Inicia no tendao, conforme o esquema de Bunnel apresentado no PDF.",
+    trajeto: "Segue em padrao de travamento/entrecruzamento no tendao para distribuir a tracao.",
+    termina: "Finaliza com amarracao que mantem a tensao do reparo tendineo.",
+    servePara: "Sutura indicada no PDF para tendao.",
     pontosChave: [
-      "E seromuscular: nao pega mucosa.",
-      "E continua e invaginante.",
-      "E uma das principais comparacoes com Connel."
+      "A indicacao destacada e tendao.",
+      "Deve resistir a tracao longitudinal.",
+      "Nao e sutura comum de pele."
     ],
     errosComuns: [
-      "Falar que atravessa mucosa.",
-      "Esquecer que o trajeto e paralelo a borda.",
-      "Confundir com Schmieden."
+      "Classificar como simples de pele.",
+      "Nao citar tendao.",
+      "Perder a ideia de distribuicao da tracao."
     ],
     perguntas: [
-      "A Cushing e seromucosa ou seromuscular?",
-      "Por que ela nao deve entrar na luz do orgao?",
-      "Como voce diferenciaria Cushing de Connel?"
+      "Para qual tecido a Bunnel e indicada?",
+      "Por que precisa distribuir tracao?",
+      "Ela pertence ao treino de pele simples?"
+    ]
+  },
+  {
+    id: "intradermica-subcutanea",
+    nome: "Intradermica ou subcutanea",
+    grupo: "Suturas continuas",
+    tipo: "Zig-zag intradermico",
+    comeca: "Inicia escondendo o no no interior dos tecidos.",
+    trajeto: "Segue em formato de zig-zag, com a agulha perpendicular a incisao, avancando paralela a incisao sob a derme/no subcutaneo.",
+    termina: "Termina com o no novamente sepultado.",
+    servePara: "Usada frequentemente na forma continua para fechamento intradermico ou subcutaneo.",
+    pontosChave: [
+      "Nao deve ser chamada incorretamente de subcuticular.",
+      "Fios 3-0 ou 4-0 podem ser usados.",
+      "Os nos ficam sepultados."
+    ],
+    errosComuns: [
+      "Deixar o no aparente.",
+      "Nao fazer o zig-zag.",
+      "Chamar de subcuticular como termo principal."
+    ],
+    perguntas: [
+      "Onde fica o no inicial?",
+      "Qual e o formato do trajeto?",
+      "Quais fios podem ser usados segundo o PDF?"
+    ]
+  },
+  {
+    id: "sutura-de-tensao",
+    nome: "Suturas de tensao",
+    grupo: "Suturas especiais de pele",
+    tipo: "Suporte de tensao",
+    comeca: "Sao colocadas longe das bordas da pele.",
+    trajeto: "Distribuem a forca longe da linha de sutura; as bordas da pele sao fechadas com pontos interrompidos simples.",
+    termina: "Podem receber suporte adicional com botoes, tubos de borracha, plastico ou silicone antes dos nos.",
+    servePara: "Usadas quando existe muita tensao na linha de sutura e e necessaria forca adicional para fechar a ferida.",
+    pontosChave: [
+      "Ajudam a evitar deiscencia em feridas sob muita tensao.",
+      "Devem ficar longe das bordas para preservar suprimento sanguineo.",
+      "Donatti/U vertical promove bom suporte com minima reducao vascular."
+    ],
+    errosComuns: [
+      "Colocar perto demais da borda.",
+      "Nao fechar a pele entre elas com pontos simples.",
+      "Ignorar risco de isquemia se mal aplicadas."
+    ],
+    perguntas: [
+      "Quando usar sutura de tensao?",
+      "Por que ela fica longe das bordas?",
+      "Que materiais podem servir de suporte adicional?"
+    ]
+  },
+  {
+    id: "gambee",
+    nome: "Gambee",
+    grupo: "Suturas viscerais",
+    tipo: "Visceral",
+    comeca: "Inicia na parede visceral conforme o esquema de suturas viscerais.",
+    trajeto: "Padrao visceral usado em anastomoses, com controle das camadas da parede.",
+    termina: "O no aproxima a parede sem excesso de tensao.",
+    servePara: "Sutura visceral listada no PDF antes das suturas de Schmieden, Lembert, Connell e Cushing.",
+    pontosChave: [
+      "Pertence ao grupo de suturas viscerais.",
+      "Deve ser diferenciada das suturas de pele.",
+      "A cobranca tende a ser pelo reconhecimento do nome e contexto."
+    ],
+    errosComuns: [
+      "Classificar como sutura de pele.",
+      "Misturar com Lembert.",
+      "Nao mencionar que e visceral."
+    ],
+    perguntas: [
+      "Em que grupo a Gambee aparece?",
+      "Ela e sutura de pele ou visceral?",
+      "Com quais suturas ela deve ser comparada no capitulo?"
     ]
   },
   {
     id: "schmieden",
-    nome: "Schmieden (seromucosa)",
-    grupo: "Sutura continua",
-    tipo: "Continua perfurante seromucosa",
-    comeca: "Comeca com no inicial e passagem envolvendo a mucosa.",
-    trajeto: "Segue em pontos continuos perfurantes, envolvendo todas as camadas da parede e incluindo a mucosa.",
-    termina: "Finaliza com arremate no fim da sutura.",
-    servePara: "Fechamento de orgaos ocos quando se deseja uma primeira camada continua e perfurante.",
+    nome: "Schmieden",
+    grupo: "Suturas viscerais",
+    tipo: "Aposicao seromucosa contaminante",
+    comeca: "O ponto e introduzido como uma sutura simples interrompida, da serosa pela muscular e mucosa ate o lume.",
+    trajeto: "Volta do lume pela mucosa e muscular antes de cruzar a incisao; no lado oposto entra na muscular, passa pela mucosa ao lume e retorna por mucosa, muscular e serosa.",
+    termina: "O fio inicial e final sao apertados para que a sutura penetre nos tecidos.",
+    servePara: "Muito usada em anastomose intestinal quando se deseja uma unica camada de sutura.",
     pontosChave: [
-      "E seromucosa/perfurante: pega mucosa.",
-      "E continua e atravessa as camadas da parede.",
-      "Costuma aparecer em comparacoes com Cushing e Connel."
+      "E seromucosa.",
+      "E contaminante porque penetra o lume.",
+      "Pode ser usada em anastomose intestinal."
     ],
     errosComuns: [
-      "Chamar de seromuscular.",
-      "Nao falar que e continua.",
-      "Confundir finalidade com a Lembert, que e extramucosa."
+      "Dizer que nao pega mucosa.",
+      "Confundir com Cushing.",
+      "Nao citar o lume."
     ],
     perguntas: [
-      "Schmieden pega mucosa?",
-      "Em que ela se diferencia da Lembert?",
-      "Como voce descreveria o trajeto dela?"
+      "A Schmieden penetra o lume?",
+      "Qual camada ela inclui?",
+      "Quando ela e usada com frequencia?"
     ]
   },
   {
-    id: "zig-zag",
-    nome: "Zig-Zag",
-    grupo: "Sutura continua",
-    tipo: "Continua alternada",
-    comeca: "Comeca com no inicial em uma extremidade.",
-    trajeto: "A agulha alterna os lados em diagonal, formando um desenho em zigue-zague ao longo da ferida.",
-    termina: "Finaliza com arremate na extremidade oposta.",
-    servePara: "Treinar continuidade com alternancia regular e distribuicao de tensao.",
+    id: "lembert",
+    nome: "Lembert",
+    grupo: "Suturas viscerais",
+    tipo: "Invaginante nao contaminante seromuscular",
+    comeca: "E aplicada do lado de fora do lume.",
+    trajeto: "A agulha passa por serosa, muscular e submucosa, retorna por muscular e serosa no mesmo lado, cruza para o lado oposto e repete o trajeto serosa-muscular-submucosa-serosa distal.",
+    termina: "O fio inicial e final sao atados; pode seguir em forma continua vertical ou ser feita interrompida.",
+    servePara: "Fechamento de visceras ocas com invaginacao sem penetrar o lume.",
     pontosChave: [
-      "O desenho final e o principal reconhecimento.",
-      "E continua.",
-      "Precisa manter diagonais regulares."
+      "E nao contaminante.",
+      "E seromuscular/submucosa, sem penetrar o lume.",
+      "Pode ser continua ou interrompida."
     ],
     errosComuns: [
-      "Fazer passagens retas como continua simples.",
-      "Perder o espacamento das diagonais.",
-      "Nao explicar a alternancia dos lados."
+      "Dizer que pega mucosa/lume.",
+      "Confundir com Connell.",
+      "Nao mencionar invaginacao."
     ],
     perguntas: [
-      "Como o desenho em zig-zag aparece no EVA?",
-      "O que diferencia do ponto continuo simples?",
-      "Como voce controla a regularidade?"
+      "A Lembert e contaminante?",
+      "Ela pode ser interrompida?",
+      "Qual efeito produz na viscera?"
     ]
   },
   {
-    id: "lembert-continua",
-    nome: "Lembert continua",
-    grupo: "Sutura continua",
-    tipo: "Invaginante seromuscular continua",
-    comeca: "Comeca com no inicial, mantendo a agulha no plano seromuscular.",
-    trajeto: "Faz passagens continuas extramucosas que invaginam as bordas.",
-    termina: "Arremata ao final, mantendo a inversao da linha suturada.",
-    servePara: "Reforcar e invaginar orgaos ocos como camada continua sem penetrar a mucosa.",
+    id: "halsted-visceral",
+    nome: "Halsted",
+    grupo: "Suturas viscerais",
+    tipo: "U interrompido invertido",
+    comeca: "Deriva da Lembert.",
+    trajeto: "Consiste em Lembert com somente duas passagens paralelas e reversas no tecido.",
+    termina: "O no mantem o U interrompido invertido.",
+    servePara: "Versao interrompida derivada da Lembert para invaginacao visceral.",
     pontosChave: [
-      "E a versao continua da Lembert.",
-      "E seromuscular, nao seromucosa.",
-      "Principal funcao: invaginacao e reforco."
+      "E chamada no PDF de U interrompido invertido.",
+      "Tem apenas duas passagens paralelas e reversas.",
+      "E modificacao da Lembert."
     ],
     errosComuns: [
-      "Confundir com Lembert isolada.",
+      "Confundir com pinca Halsted.",
+      "Dizer que e continua.",
+      "Nao ligar com Lembert."
+    ],
+    perguntas: [
+      "De qual sutura a Halsted visceral deriva?",
+      "Quantas passagens ela tem?",
+      "Como o PDF a chama?"
+    ]
+  },
+  {
+    id: "connell",
+    nome: "Connell",
+    grupo: "Suturas viscerais",
+    tipo: "Continua invaginante horizontal contaminante",
+    comeca: "Inicia com uma sutura em U vertical invertida.",
+    trajeto: "Avanca paralela a linha de incisao, passa por serosa, muscular, submucosa e mucosa, penetrando o lume antes de retornar.",
+    termina: "O no e feito ao final, tracionando periodicamente o fio para favorecer inversao.",
+    servePara: "Sutura continua invaginante horizontal de visceras ocas quando se aceita penetrar o lume.",
+    pontosChave: [
+      "Penetra o lumen da viscera.",
+      "E horizontal e invaginante.",
+      "Diferenca central: Connell pega mucosa, Cushing nao."
+    ],
+    errosComuns: [
+      "Chamar de nao contaminante.",
+      "Confundir com Cushing.",
+      "Nao citar a inversao."
+    ],
+    perguntas: [
+      "A Connell penetra o lumen?",
+      "Qual e a diferenca para Cushing?",
+      "Como ela inicia?"
+    ]
+  },
+  {
+    id: "cushing",
+    nome: "Cushing",
+    grupo: "Suturas viscerais",
+    tipo: "Continua invaginante horizontal nao contaminante",
+    comeca: "Inicia com uma sutura em U vertical invertida.",
+    trajeto: "Avanca paralela a incisao, passando por serosa, muscular e submucosa, sem penetrar a mucosa/lumen.",
+    termina: "O no e feito no final, com tracoes periodicas para favorecer inversao.",
+    servePara: "Fechamento invaginante de visceras ocas sem penetrar o lume.",
+    pontosChave: [
+      "Nao penetra o lumen.",
+      "Passa somente ate a submucosa.",
+      "E comparacao obrigatoria com Connell."
+    ],
+    errosComuns: [
       "Dizer que pega mucosa.",
-      "Nao mencionar que e continua."
+      "Confundir com Schmieden.",
+      "Nao mencionar que e horizontal e continua."
     ],
     perguntas: [
-      "O que muda da Lembert isolada para a continua?",
-      "A Lembert continua pega mucosa?",
-      "Qual e a finalidade principal?"
+      "A Cushing atravessa mucosa?",
+      "Ate qual camada ela passa?",
+      "Por que e nao contaminante?"
+    ]
+  },
+  {
+    id: "parker-kerr",
+    nome: "Parker-Kerr",
+    grupo: "Suturas viscerais",
+    tipo: "Fechamento de coto visceral",
+    comeca: "Comeca com uma Cushing sobre pinca sem dar no.",
+    trajeto: "Depois faz uma Lembert sobre a primeira linha.",
+    termina: "Finaliza o fechamento do coto visceral com a combinacao das linhas.",
+    servePara: "Fechamento de cotos viscerais.",
+    pontosChave: [
+      "Cushing sobre pinca sem no.",
+      "Lembert sobre a primeira.",
+      "E modificacao usada em cotos viscerais."
+    ],
+    errosComuns: [
+      "Dar no na Cushing inicial.",
+      "Esquecer a Lembert sobreposta.",
+      "Descrever como sutura de pele."
+    ],
+    perguntas: [
+      "Qual e a sequencia da Parker-Kerr?",
+      "A Cushing inicial recebe no?",
+      "Para que tipo de estrutura ela e usada?"
+    ]
+  },
+  {
+    id: "bolsa-de-tabaco",
+    nome: "Bolsa de tabaco",
+    grupo: "Suturas viscerais",
+    tipo: "Circular invaginante",
+    comeca: "Inicia ao redor de uma abertura ou coto.",
+    trajeto: "Segue em padrao circular, permitindo o fechamento por tracao do fio.",
+    termina: "Ao tracionar e amarrar, o tecido fecha como uma bolsa.",
+    servePara: "Padrao citado no PDF junto das suturas viscerais para fechamento circular/invaginante.",
+    pontosChave: [
+      "O trajeto e circular.",
+      "Fecha por tracao do fio.",
+      "Produz invaginacao do tecido."
+    ],
+    errosComuns: [
+      "Fazer linha reta continua.",
+      "Nao manter o circulo.",
+      "Nao explicar o efeito de bolsa."
+    ],
+    perguntas: [
+      "Qual e o formato da bolsa de tabaco?",
+      "Como ela fecha o tecido?",
+      "Qual efeito ela produz?"
     ]
   }
 ];
 
 window.SUTURE_COMPARISONS = [
   ["donatti", "wolff"],
-  ["connel", "cushing"],
-  ["lembert-isolada", "lembert-continua"],
+  ["sultan-x", "wolff"],
   ["longe-perto-perto-longe", "longe-longe-perto-perto"],
-  ["longe-longe-perto-perto", "perto-perto-longe-longe"],
-  ["continua-simples", "festonada"],
-  ["cushing", "schmieden"]
+  ["perto-longe", "longe-perto"],
+  ["longe-perto", "longe-perto-perto-longe"],
+  ["kurschner", "festonada"],
+  ["bunnel", "intradermica-subcutanea"],
+  ["wolff", "colchoeiro-continuo"],
+  ["schmieden", "cushing"],
+  ["connell", "cushing"],
+  ["lembert", "connell"],
+  ["lembert", "halsted-visceral"],
+  ["parker-kerr", "cushing"],
+  ["intradermica-subcutanea", "kurschner"]
 ];
